@@ -16,7 +16,7 @@ try {
 	}
 	$prefs.setValueForKey(Cookie, 'KDLK_STORE_COOKIE');
 	$notify('凯迪拉克会员商城', `Cookie写入成功！`
-		, `Cookie：${KDLK_APP_COOKIE}`);
+		, `Cookie：${Cookie}`);
 	$done();
 } catch (err) {
 	console.log('\n========================error========================\n');
