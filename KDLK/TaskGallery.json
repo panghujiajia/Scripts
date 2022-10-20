@@ -2,15 +2,15 @@
     "name": "凯迪拉克",
     "task": [
         {
-            "config": "0 10 * * * https://raw.githubusercontent.com/panghujiajia/Quantumult/KDLK/DailyTask.js, tag=凯迪拉克每日任务, enabled=true",
+            "config": "0 10 * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/feature/0.0.1/KDLK/DailyTask.js, tag=凯迪拉克每日任务, enabled=true",
             "addons": "https://raw.githubusercontent.com/crossutility/Quantumult-X/master/sample-import-rewrite.txt"
         },
         {
-            "config": "0 10 * * * KDLK/SignIn.js, tag=凯迪拉克商城签到, enabled=true",
+            "config": "0 10 * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/feature/0.0.1/KDLK/SignIn.js, tag=凯迪拉克商城签到, enabled=true",
             "addons": "https://raw.githubusercontent.com/crossutility/Quantumult-X/master/sample-import-rewrite.txt"
         },
         {
-            "config": "10/20 * * * * KDLK/RefreshCookie.js, tag=凯迪拉克刷新COOKIE, enabled=true",
+            "config": "10/20 * * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/feature/0.0.1/KDLK/RefreshCookie.js, tag=凯迪拉克刷新COOKIE, enabled=true",
             "addons": "https://raw.githubusercontent.com/crossutility/Quantumult-X/master/sample-import-rewrite.txt"
         }
     ],
