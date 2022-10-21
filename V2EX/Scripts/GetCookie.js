@@ -1,7 +1,7 @@
 // 该脚本用于获取签到的Cookie
 
 try {
-	const { headers } = $request;
+	const { headers } = $response;
 	const { Cookie } = headers;
 	if (!Cookie || Cookie.indexOf('A2=' < 0)) {
 		console.log('\n================================================\n');
