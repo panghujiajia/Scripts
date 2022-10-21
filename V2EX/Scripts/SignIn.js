@@ -110,10 +110,10 @@ async function getSigninInfo(success) {
 				);
 
 				if (body.indexOf('每日登录奖励已领取') < 0) {
-					const code = data.match(/<input[^>]*\/mission\/daily\/redeem\?once=(\d+)[^>]*>/)[1]
+					const code = body.match(/<input[^>]*\/mission\/daily\/redeem\?once=(\d+)[^>]*>/)[1];
 					await getSignin(code);
 				} else {
-					let continueDays = data.replace(/(.*?)\s(\d+)\s天(.*?)/, '$2');
+					let continueDays = body.replace(/(.*?)\s(\d+)\s天(.*?)/, '$2');
 					if (success) {
 						$notify(
 							'V2EX',
