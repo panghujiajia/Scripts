@@ -1,5 +1,11 @@
 # 自写圈x脚本
 
-### [凯迪拉克APP商城自动签到 + 每日任务（浏览文章、点赞文章）脚本](https://github.com/panghujiajia/QuantumultX/tree/master/KDLK)
+### [凯迪拉克](https://github.com/panghujiajia/QuantumultX/tree/master/KDLK)
+- 商城自动签到
+- 每日任务（浏览文章、点赞文章）
 
-### [安吉星APP自动签到脚本](https://github.com/panghujiajia/QuantumultX/tree/master/AJX)
+### [安吉星](https://github.com/panghujiajia/QuantumultX/tree/master/AJX)
+- 自动签到
+
+### [V2EX](https://github.com/panghujiajia/QuantumultX/tree/master/V2EX)
+- 自动签到

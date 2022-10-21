@@ -94,8 +94,7 @@ async function getSigninInfo(success) {
                 )[1];
                 await getSignin(code);
             } else {
-                body.replace(/(.*?)\s(\d+)\s天(.*?)/, '$2');
-                let continueDays = RegExp.$2;
+                let continueDays = body.match(/已连续登录 (\d+?) 天/)[1];
                 if (success) {
                     $notify(
                         'V2EX',
