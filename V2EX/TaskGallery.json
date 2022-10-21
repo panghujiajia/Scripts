@@ -1,0 +1,9 @@
+{
+    "name": "V2EX",
+    "task": [
+        {
+            "config": "1 0 * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/V2EX/Scripts/SignIn.js, tag=V2EX签到, enabled=true"
+        }
+    ],
+    "description": "V2EX签到"
+}

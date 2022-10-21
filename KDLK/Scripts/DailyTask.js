@@ -230,26 +230,22 @@ async function getPrize(type) {
 			if (resultCode !== '0000') {
 				$notify(
 					'凯迪拉克',
-					`${
-						type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
+					`${type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
 					}任务失败！`,
 					`${message}`
 				);
 				console.log(
-					`${
-						type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
+					`${type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
 					}任务失败！${message}`
 				);
 			} else {
 				$notify(
 					'凯迪拉克',
-					`${
-						type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
+					`${type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
 					}任务成功！`
 				);
 				console.log(
-					`${
-						type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
+					`${type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
 					}任务成功！`
 				);
 			}
