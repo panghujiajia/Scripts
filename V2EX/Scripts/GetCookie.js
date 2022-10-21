@@ -1,12 +1,14 @@
 // 该脚本用于获取签到的Cookie
 
 try {
-	const { headers } = $response;
+	const { headers } = $request;
 	const { Cookie } = headers;
 	if (!Cookie || Cookie.indexOf('A2=' < 0)) {
 		console.log('\n================================================\n');
 		console.log('获取Cookie失败：');
 		console.log(JSON.stringify(headers));
+		console.log('\n================================================\n');
+		console.log(Cookie);
 		console.log('\n================================================\n');
 
 		$notify('V2EX', `Cookie获取失败！`);
