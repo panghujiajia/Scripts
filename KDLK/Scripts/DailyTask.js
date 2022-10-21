@@ -71,25 +71,24 @@ function getTask() {
             if (resultCode === '0000') {
                 const task = taskGroups.find(item => item.taskGroup === 'DAY');
                 if (task) {
-                    const KD_BROWSE = task.tasks.find(
-                        i => i.id === 'KD_BROWSE'
-                    );
-                    const KD_PRAISE = task.tasks.find(
-                        i => i.id === 'KD_PRAISE'
-                    );
                     // FINISHED 完成任务但没领奖
                     // RECEIVED 完成任务并已领奖
                     // UNFINISHED 没有完成
+                    const list = task.tasks
+                        .filter(
+                            i => i.id === 'KD_BROWSE' || i.id === 'KD_PRAISE'
+                        )
+                        .filter(i => i.status !== 'RECEIVED');
 
-                    if (
-                        KD_BROWSE.status !== 'RECEIVED' ||
-                        KD_PRAISE.status !== 'RECEIVED'
-                    ) {
-                        await doTask(KD_BROWSE, 'KD_BROWSE');
-                        await doTask(KD_PRAISE, 'KD_PRAISE');
-                    } else {
+                    const len = list.length;
+                    if (!len) {
                         $notify('凯迪拉克', `任务失败！`, `今日任务已做完！`);
                         console.log(`任务失败！今日任务已做完！`);
+                    } else {
+                        for (let i = 0; i < len; i++) {
+                            const item = list[i];
+                            await doTask(item);
+                        }
                     }
                 }
             }
@@ -102,13 +101,12 @@ function getTask() {
     );
 }
 
-async function doTask(taskObj, taskType) {
-    if (taskObj.status !== 'RECEIVED') {
-        if (taskObj.status === 'FINISHED') {
-            await getPrize(taskType);
-        } else {
-            await getList(taskType);
-        }
+async function doTask(item) {
+    const { id, status } = item;
+    if (status === 'FINISHED') {
+        await getPrize(id);
+    } else {
+        await getList(id);
     }
 }
 
