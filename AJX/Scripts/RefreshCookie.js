@@ -15,7 +15,7 @@ refreshAppToken();
 
 function refreshAppToken() {
 	const url = `https://www.onstar.com.cn/mssos/sos/credit/v1/getUserSignInit`;
-	const method = `POST`;
+	const method = `GET`;
 	const headers = {
 		'Connection': `keep-alive`,
 		'Accept-Encoding': `gzip, deflate, br`,
