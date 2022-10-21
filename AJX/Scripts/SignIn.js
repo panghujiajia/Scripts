@@ -100,7 +100,7 @@ async function getSigninInfo(success) {
 
 		const myRequest = {
 			url,
-			method,
+			method: 'GET',
 			headers,
 			body: JSON.stringify(reqBody),
 		};
