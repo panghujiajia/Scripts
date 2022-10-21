@@ -1,0 +1,22 @@
+{
+    "name": "quantumultx",
+    "version": "1.0.0",
+    "description": "自写自用圈X脚本",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/panghujiajia/QuantumultX.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/panghujiajia/QuantumultX/issues"
+    },
+    "homepage": "https://github.com/panghujiajia/QuantumultX#readme",
+    "devDependencies": {
+        "prettier": "^2.7.1"
+    }
+}
