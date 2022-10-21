@@ -82,7 +82,7 @@ async function getSigninInfo(success) {
     };
     await $task.fetch(myRequest).then(
         async response => {
-            const { body } = response;
+            let { body } = response;
 
             console.log('\n================================================\n');
             console.log(body);
@@ -94,7 +94,8 @@ async function getSigninInfo(success) {
                 )[1];
                 await getSignin(code);
             } else {
-                let continueDays = body.replace(/(.*?)\s(\d+)\s天(.*?)/, '$2');
+                body.replace(/(.*?)\s(\d+)\s天(.*?)/, '$2');
+                let continueDays = RegExp.$2;
                 if (success) {
                     $notify(
                         'V2EX',
