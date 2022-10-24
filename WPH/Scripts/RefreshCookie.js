@@ -2,8 +2,9 @@
 
 const WPH_COOKIE = $prefs.valueForKey('WPH_COOKIE');
 const WPH_TOKEN = $prefs.valueForKey('WPH_TOKEN');
+const WPH_QUERYPARAMS = $prefs.valueForKey('WPH_QUERYPARAMS');
 
-if (!WPH_COOKIE || !WPH_TOKEN) {
+if (!WPH_COOKIE || !WPH_TOKEN || !WPH_QUERYPARAMS) {
     $notify('唯品会', `Cookie读取失败！`, `请先打开重写，进入唯品会获取Cookie`);
     $done();
 }
@@ -11,7 +12,7 @@ if (!WPH_COOKIE || !WPH_TOKEN) {
 refreshAppToken();
 
 function refreshAppToken() {
-    const url = `https://act-ug.vip.com/signIn/info`;
+    const url = `https://act-ug.vip.com/signIn/info?${WPH_QUERYPARAMS}`;
     const method = `POST`;
     const headers = {
         Connection: `keep-alive`,

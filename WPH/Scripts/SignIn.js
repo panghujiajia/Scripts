@@ -4,11 +4,12 @@
 
 const WPH_COOKIE = $prefs.valueForKey('WPH_COOKIE');
 const WPH_TOKEN = $prefs.valueForKey('WPH_TOKEN');
+const WPH_QUERYPARAMS = $prefs.valueForKey('WPH_QUERYPARAMS');
 console.log('\n================================================\n');
 console.log(`Cookie：${WPH_COOKIE}`);
 console.log('\n================================================\n');
 
-if (!WPH_COOKIE || !WPH_TOKEN) {
+if (!WPH_COOKIE || !WPH_TOKEN || !WPH_QUERYPARAMS) {
     $notify('唯品会', `Cookie读取失败！`, `请先打开重写，进入唯品会获取Cookie`);
     $done();
 }
@@ -33,7 +34,7 @@ getSigninInfo();
 
 // 签到方法
 async function getSignin() {
-    const url = `${baseUrl}/exec`;
+    const url = `${baseUrl}/exec?${WPH_QUERYPARAMS}`;
     const reqBody = `source_app=app&client_type=wap&app_name=shop_iphone&client=iphone&api_key=8cec5243ade04ed3a02c5972bcda0d3f&app_version=7.80.6&mobile_platform=3&mobile_channel=ng00010v%3Aal80ssgp%3A37u8zn0w%3Ang00010p&mars_cid=4ebacdc8fa8581b4de693d82e5879e0f7aef9046&warehouse=VIP_NH&fdc_area_id=104102101107&province_id=104102101107&wap_consumer=B-1&bussCode=app_sign_in&openid=&time=0&is_front=1`;
 
     const myRequest = {
@@ -77,7 +78,7 @@ async function getSignin() {
 
 // 获取签到信息
 async function getSigninInfo(success) {
-    const url = `${baseUrl}/info`;
+    const url = `${baseUrl}/info?${WPH_QUERYPARAMS}`;
     const reqBody = `source_app=app&client_type=wap&app_name=shop_iphone&client=iphone&api_key=8cec5243ade04ed3a02c5972bcda0d3f&app_version=7.80.6&mobile_platform=3&mobile_channel=ng00010v%3Aal80ssgp%3A37u8zn0w%3Ang00010p&mars_cid=4ebacdc8fa8581b4de693d82e5879e0f7aef9046&warehouse=VIP_NH&fdc_area_id=104102101107&province_id=104102101107&wap_consumer=B-1&bussCode=app_sign_in&openid=&time=0&is_front=1`;
 
     const myRequest = {
