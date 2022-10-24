@@ -2,7 +2,7 @@
 
 const WPH_URL = $prefs.valueForKey('WPH_URL');
 const WPH_BODY = $prefs.valueForKey('WPH_BODY');
-const WPH_HEADERS = $prefs.valueForKey('WPH_HEADERS');
+const WPH_HEADERS = JSON.parse($prefs.valueForKey('WPH_HEADERS'));
 
 if (!WPH_URL || !WPH_BODY || !WPH_HEADERS) {
     $notify('唯品会', `Cookie读取失败！`, `请先打开重写，进入唯品会获取Cookie`);

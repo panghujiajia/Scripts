@@ -18,13 +18,13 @@ try {
     }
     $prefs.setValueForKey(url, 'WPH_URL');
     $prefs.setValueForKey(body, 'WPH_BODY');
-    $prefs.setValueForKey(headers, 'WPH_HEADERS');
+    $prefs.setValueForKey(JSON.stringify(headers), 'WPH_HEADERS');
     $notify(
         '唯品会',
         `Cookie写入成功！`,
         `url：${url}，\n\n
         body：${body}，\n\n
-        headers：${headers}`
+        headers：${JSON.stringify(headers)}`
     );
     $done();
 } catch (err) {
