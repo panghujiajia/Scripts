@@ -1,7 +1,7 @@
 // 该脚本用于获取签到的Cookie
 
 try {
-    const { headers, method, path } = $request;
+    const { headers, url, body } = $request;
     const { Cookie, Authorization } = headers;
     if (method !== 'POST') {
         $done();
@@ -16,16 +16,15 @@ try {
 
         $done();
     }
-    const QueryParams = path.split('?')[1];
-    $prefs.setValueForKey(QueryParams, 'WPH_QUERYPARAMS');
-    $prefs.setValueForKey(Cookie, 'WPH_COOKIE');
-    $prefs.setValueForKey(Authorization, 'WPH_TOKEN');
+    $prefs.setValueForKey(url, 'WPH_URL');
+    $prefs.setValueForKey(body, 'WPH_BODY');
+    $prefs.setValueForKey(headers, 'WPH_HEADERS');
     $notify(
         '唯品会',
         `Cookie写入成功！`,
-        `Cookie：${Cookie}，\n\n
-        Authorization：${Authorization}，\n\n
-        QueryParams：${QueryParams}`
+        `url：${url}，\n\n
+        body：${body}，\n\n
+        headers：${headers}`
     );
     $done();
 } catch (err) {

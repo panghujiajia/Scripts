@@ -2,52 +2,27 @@
  * 唯品会签到脚本
  */
 
-const WPH_COOKIE = $prefs.valueForKey('WPH_COOKIE');
-const WPH_TOKEN = $prefs.valueForKey('WPH_TOKEN');
-const WPH_QUERYPARAMS = $prefs.valueForKey('WPH_QUERYPARAMS');
-console.log('\n================================================\n');
-console.log(`Cookie：${WPH_COOKIE}`);
-console.log('\n================================================\n');
+const WPH_URL = $prefs.valueForKey('WPH_URL');
+const WPH_BODY = $prefs.valueForKey('WPH_BODY');
+const WPH_HEADERS = $prefs.valueForKey('WPH_HEADERS');
 
-if (!WPH_COOKIE || !WPH_TOKEN || !WPH_QUERYPARAMS) {
+if (!WPH_URL || !WPH_BODY || !WPH_HEADERS) {
     $notify('唯品会', `Cookie读取失败！`, `请先打开重写，进入唯品会获取Cookie`);
     $done();
 }
 
-function getQueryString(name) {
-    const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, 'i');
-    const value = WPH_QUERYPARAMS.match(reg);
-    return unescape(value[2]);
-}
-
 const method = 'POST';
-const baseUrl = 'https://act-ug.vip.com/signIn';
-const fdc_area_id = getQueryString('fdc_area_id');
-const reqBody = `source_app=app&client_type=wap&app_name=shop_iphone&client=iphone&api_key=8cec5243ade04ed3a02c5972bcda0d3f&app_version=7.80.6&mobile_platform=3&mobile_channel=ng00010v%3Aal80ssgp%3A37u8zn0w%3Ang00010p&mars_cid=4ebacdc8fa8581b4de693d82e5879e0f7aef9046&warehouse=VIP_NH&fdc_area_id=${fdc_area_id}&province_id=${fdc_area_id}&wap_consumer=B-1&bussCode=app_sign_in&openid=&time=0&is_front=1`;
-const headers = {
-    Connection: `keep-alive`,
-    'Accept-Encoding': `gzip, deflate, br`,
-    'Content-Type': `application/x-www-form-urlencoded; charset=UTF-8`,
-    Origin: `https://mst.vip.com`,
-    'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 16_0_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 VIPSHOP/7.80.6 (iphone; 2.0.0; 4ebacdc8fa8581b4de693d82e5879e0f7aef9046)`,
-    Authorization: WPH_TOKEN,
-    Cookie: WPH_COOKIE,
-    Host: `act-ug.vip.com`,
-    Referer: `https://mst.vip.com/`,
-    'Accept-Language': `zh-CN,zh-Hans;q=0.9`,
-    Accept: `*/*`
-};
 
 getSigninInfo();
 
 // 签到方法
 async function getSignin() {
-    const url = `${baseUrl}/exec?${WPH_QUERYPARAMS}`;
+    const url = WPH_URL.replace('info', 'exec');
     const myRequest = {
         url,
         method,
-        headers,
-        body: reqBody
+        headers: WPH_HEADERS,
+        body: WPH_BODY
     };
     await $task.fetch(myRequest).then(
         async response => {
@@ -84,13 +59,13 @@ async function getSignin() {
 
 // 获取签到信息
 async function getSigninInfo(success) {
-    const url = `${baseUrl}/info?${WPH_QUERYPARAMS}`;
+    const url = WPH_URL;
 
     const myRequest = {
         url,
         method,
-        headers,
-        body: reqBody
+        headers: WPH_HEADERS,
+        body: WPH_BODY
     };
     await $task.fetch(myRequest).then(
         async response => {
