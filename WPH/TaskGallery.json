@@ -1,0 +1,12 @@
+{
+    "name": "唯品会",
+    "task": [
+        {
+            "config": "1 0 * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/WPH/Scripts/SignIn.js, tag=唯品会签到, enabled=true"
+        },
+        {
+            "config": "10/20 * * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/WPH/Scripts/RefreshCookie.js, tag=唯品会刷新COOKIE, enabled=true"
+        }
+    ],
+    "description": "唯品会签到"
+}

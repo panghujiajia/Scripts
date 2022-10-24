@@ -14,7 +14,7 @@ if (!KDLK_APP_COOKIE || !KDLK_APP_HEARDERS || !KDLK_APP_ACCESS_TOKEN) {
     $notify(
         '凯迪拉克APP',
         `Cookie读取失败！`,
-        `请先打开重写，进去APP-我的页面获取Cookie`
+        `请先打开重写，进入APP-我的页面获取Cookie`
     );
     $done();
 }

@@ -4,7 +4,7 @@ const AJX_COOKIE = $prefs.valueForKey('AJX_COOKIE');
 const AJX_TOKEN = $prefs.valueForKey('AJX_TOKEN');
 
 if (!AJX_COOKIE || !AJX_TOKEN) {
-    $notify('安吉星', `刷新Cookie失败！`, `请先打开重写，进去APP获取Cookie`);
+    $notify('安吉星', `刷新Cookie失败！`, `请先打开重写，进入APP获取Cookie`);
     $done();
 }
 

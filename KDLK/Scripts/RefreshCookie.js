@@ -16,7 +16,7 @@ if (
 	!KDLK_APP_ACCESS_TOKEN ||
 	!KDLK_APP_REFRESH_ACCESS_TOKEN
 ) {
-	$notify('凯迪拉克', `刷新Cookie失败！`, `请先打开重写，进去APP获取Cookie`);
+	$notify('凯迪拉克', `刷新Cookie失败！`, `请先打开重写，进入APP获取Cookie`);
 	$done();
 }
 

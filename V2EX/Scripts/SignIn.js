@@ -8,7 +8,7 @@ console.log(`Cookie：${V2EX_COOKIE}`);
 console.log('\n================================================\n');
 
 if (!V2EX_COOKIE) {
-    $notify('V2EX', `Cookie读取失败！`, `请先打开重写，进去V2EX获取Cookie`);
+    $notify('V2EX', `Cookie读取失败！`, `请先打开重写，进入V2EX获取Cookie`);
     $done();
 }
 

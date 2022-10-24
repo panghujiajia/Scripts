@@ -11,7 +11,7 @@ if (!KDLK_STORE_COOKIE) {
     $notify(
         '凯迪拉克商城',
         `Cookie读取失败！`,
-        `请先打开重写，进去APP-商城页面获取Cookie`
+        `请先打开重写，进入APP-商城页面获取Cookie`
     );
     $done();
 }
