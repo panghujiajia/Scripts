@@ -1,7 +1,7 @@
 // 该脚本用于获取签到的Cookie
 
 try {
-    const { headers, url, body } = $request;
+    const { headers, method, url, body } = $request;
     const { Cookie, Authorization } = headers;
     if (method !== 'POST') {
         $done();
