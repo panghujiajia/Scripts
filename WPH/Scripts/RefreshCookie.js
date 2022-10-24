@@ -18,12 +18,12 @@ function refreshAppToken() {
         Connection: `keep-alive`,
         'Accept-Encoding': `gzip, deflate, br`,
         'Content-Type': `application/x-www-form-urlencoded; charset=UTF-8`,
-        Origin: `https://mst.vip.com`,
+        Origin: `mst-gd15-ct.vip.com`,
         'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 16_0_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 VIPSHOP/7.80.6 (iphone; 2.0.0; 4ebacdc8fa8581b4de693d82e5879e0f7aef9046)`,
         Authorization: WPH_TOKEN,
         Cookie: WPH_COOKIE,
         Host: `act-ug.vip.com`,
-        Referer: `https://mst.vip.com/`,
+        Referer: `https://mst-gd15-ct.vip.com/`,
         'Accept-Language': `zh-CN,zh-Hans;q=0.9`,
         Accept: `*/*`
     };
