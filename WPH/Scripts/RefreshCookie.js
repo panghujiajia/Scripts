@@ -14,8 +14,7 @@ refreshAppToken();
 
 function refreshAppToken() {
 
-    const queryReg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-
+    const queryReg = new RegExp('(^|&)fdc_area_id=([^&]*)(&|$)', 'i');
     const query = WPH_QUERYPARAMS.match(queryReg);
     const fdc_area_id = unescape(query[2]);
 
