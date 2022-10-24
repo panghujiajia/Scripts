@@ -9,15 +9,16 @@ if (!WPH_COOKIE || !WPH_TOKEN || !WPH_QUERYPARAMS) {
     $done();
 }
 
+function getQueryString(name) {
+    const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, 'i');
+    const value = WPH_QUERYPARAMS.match(reg);
+    return unescape(value[2]);
+}
+
 refreshAppToken();
- 
 
 function refreshAppToken() {
-
-    const queryReg = new RegExp('(^|&)fdc_area_id=([^&]*)(&|$)', 'i');
-    const query = WPH_QUERYPARAMS.match(queryReg);
-    const fdc_area_id = unescape(query[2]);
-
+    const fdc_area_id = getQueryString('fdc_area_id');
     const url = `https://act-ug.vip.com/signIn/info?${WPH_QUERYPARAMS}`;
     const method = `POST`;
     const headers = {
