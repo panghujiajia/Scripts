@@ -16,7 +16,7 @@ function refreshAppToken() {
 
     const queryReg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
 
-    const quey = WPH_QUERYPARAMS.match(queryReg);
+    const query = WPH_QUERYPARAMS.match(queryReg);
     const fdc_area_id = unescape(query[2]);
 
     const url = `https://act-ug.vip.com/signIn/info?${WPH_QUERYPARAMS}`;
