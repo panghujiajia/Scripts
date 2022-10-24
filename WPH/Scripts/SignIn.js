@@ -13,7 +13,7 @@ if (!WPH_URL || !WPH_BODY || !WPH_HEADERS) {
 
 const method = 'POST';
 
-getSigninInfo();
+getSignin();
 
 // 签到方法
 async function getSignin() {
