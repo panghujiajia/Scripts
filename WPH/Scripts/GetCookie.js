@@ -1,8 +1,11 @@
 // 该脚本用于获取签到的Cookie
 
 try {
-    const { headers } = $request;
+    const { headers, method } = $request;
     const { Cookie, Authorization } = headers;
+    if (method !== 'POST') {
+        $done();
+    }
     if (!Cookie || !Authorization) {
         console.log('\n================================================\n');
         console.log('获取Cookie失败：');
@@ -12,7 +15,6 @@ try {
         $notify('唯品会', `Cookie获取失败！`);
 
         $done();
-        return;
     }
     $prefs.setValueForKey(Cookie, 'WPH_COOKIE');
     $prefs.setValueForKey(Authorization, 'WPH_TOKEN');
