@@ -33,7 +33,7 @@ function refreshAppToken() {
         url: url,
         method: method,
         headers: headers,
-        body: JSON.stringify(reqBody)
+        body: reqBody
     };
 
     $task.fetch(myRequest).then(

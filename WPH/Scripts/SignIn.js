@@ -41,7 +41,7 @@ async function getSignin() {
         url,
         method,
         headers,
-        body: JSON.stringify(reqBody)
+        body: reqBody
     };
     await $task.fetch(myRequest).then(
         async response => {
@@ -85,7 +85,7 @@ async function getSigninInfo(success) {
         url,
         method,
         headers,
-        body: JSON.stringify(reqBody)
+        body: reqBody
     };
     await $task.fetch(myRequest).then(
         async response => {
