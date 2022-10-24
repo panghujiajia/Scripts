@@ -1,7 +1,14 @@
 // 该脚本用于获取签到的Cookie
 
 try {
-    const { headers, method } = $request;
+    const { headers, method, url, path } = $request;
+
+    console.log('\n================================================\n');
+    console.log('\n=======================COOKIE=========================\n');
+    console.log(url);
+    console.log(path);
+    console.log('\n================================================\n');
+
     const { Cookie, Authorization } = headers;
     if (method !== 'POST') {
         $done();
@@ -22,7 +29,7 @@ try {
         '唯品会',
         `Cookie写入成功！`,
         `Cookie：${Cookie}，\n\n
-        Authorization${Authorization}`
+        Authorization：${Authorization}`
     );
     $done();
 } catch (err) {

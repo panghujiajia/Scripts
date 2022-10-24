@@ -20,7 +20,7 @@ try {
         '安吉星',
         `Cookie写入成功！`,
         `Cookie：${Cookie}，\n\n
-		Authorization${Authorization}`
+		Authorization：${Authorization}`
     );
     $done();
 } catch (err) {
