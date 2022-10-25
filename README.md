@@ -9,3 +9,9 @@
 
 ### [V2EX](https://github.com/panghujiajia/QuantumultX/tree/master/V2EX)
 - 自动签到
+
+### ~~[唯品会](https://github.com/panghujiajia/QuantumultX/tree/master/WPH)~~ `接口有签名校验，暂不可用`
+- 自动签到
+
+### [京东](https://github.com/panghujiajia/QuantumultX/tree/master/JD)
+- 自动签到
