@@ -3,10 +3,7 @@
  */
 
 const JD_URL = $prefs.valueForKey('JD_URL');
-const JD_HEADERS = $prefs.valueForKey('JD_HEADERS');
-console.log('\n================================================\n');
-console.log(`Cookie：${JD_HEADERS}`);
-console.log('\n================================================\n');
+const JD_HEADERS = JSON.parse($prefs.valueForKey('JD_HEADERS'));
 
 if (!JD_HEADERS || !JD_URL) {
     $notify('京东', `Cookie读取失败！`, `请先打开重写，进入京东获取Cookie`);

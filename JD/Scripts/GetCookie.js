@@ -17,11 +17,11 @@ try {
         return;
     }
     $prefs.setValueForKey(url, 'JD_URL');
-    $prefs.setValueForKey(headers, 'JD_HEADERS');
+    $prefs.setValueForKey(JSON.stringify(headers), 'JD_HEADERS');
     $notify(
         '京东',
         `Cookie写入成功！`,
-        `headers：${headers}，\n\n
+        `headers：${JSON.stringify(headers)}，\n\n
 		url：${url}`
     );
     $done();
