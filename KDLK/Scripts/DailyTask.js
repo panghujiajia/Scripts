@@ -74,11 +74,9 @@ function getTask() {
                     // FINISHED 完成任务但没领奖
                     // RECEIVED 完成任务并已领奖
                     // UNFINISHED 没有完成
-                    const list = task.tasks
-                        .filter(
-                            i => i.id === 'KD_BROWSE' || i.id === 'KD_PRAISE'
-                        )
-                        .filter(i => i.status !== 'RECEIVED');
+                    const list = task.tasks.filter(
+                        i => i.status !== 'RECEIVED'
+                    );
 
                     const len = list.length;
                     if (!len) {
@@ -115,7 +113,7 @@ async function getList(type) {
     const reqBody = {
         limit: '10',
         scope: 'ALL',
-        idpUserId: 'MYCDL013650309',
+        idpUserId,
         category: 'RECOMMEND',
         skip: '0'
     };
@@ -134,6 +132,9 @@ async function getList(type) {
             if (data.length) {
                 for (let i = 0; i < data.length; i++) {
                     const item = data[i];
+                    if (type === 'KD_FORWARD') {
+                        await forward(item);
+                    }
                     if (type === 'KD_BROWSE') {
                         await read(item);
                     }
@@ -205,6 +206,32 @@ async function read(item) {
     );
 }
 
+async function forward(item) {
+    const url = `${baseUrl}/private/newCommunity/article/v1/forward`;
+    const reqBody = { articleId: item.id, idpUserId };
+
+    const myRequest = {
+        url,
+        method,
+        headers,
+        body: JSON.stringify(reqBody)
+    };
+
+    await $task.fetch(myRequest).then(
+        response => {
+            const { body } = response;
+
+            console.log('\n================================================\n');
+            console.log(`转发文章：${item.title}`);
+            console.log(body);
+            console.log('\n================================================\n');
+        },
+        reason => {
+            console.log(reason.error);
+        }
+    );
+}
+
 async function getPrize(type) {
     const url = `${baseUrl}/private/task/loop/v2/receiveReward`;
     const reqBody = { id: type };
@@ -224,32 +251,20 @@ async function getPrize(type) {
 
             console.log('\n================================================\n');
             console.log(body);
+            const textObj = {
+                KD_BROWSE: '浏览文章',
+                KD_PRAISE: '点赞文章',
+                KD_FORWARD: '转发文章'
+            };
+
+            const text = textObj[type];
 
             if (resultCode !== '0000') {
-                $notify(
-                    '凯迪拉克',
-                    `${
-                        type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
-                    }任务失败！`,
-                    `${message}`
-                );
-                console.log(
-                    `${
-                        type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
-                    }任务失败！${message}`
-                );
+                $notify('凯迪拉克', `${text}任务失败！`, `${message}`);
+                console.log(`${text}任务失败！${message}`);
             } else {
-                $notify(
-                    '凯迪拉克',
-                    `${
-                        type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
-                    }任务成功！`
-                );
-                console.log(
-                    `${
-                        type === 'KD_BROWSE' ? '浏览文章' : '点赞文章'
-                    }任务成功！`
-                );
+                $notify('凯迪拉克', `${text}任务成功！`);
+                console.log(`${text}任务成功！`);
             }
             console.log('\n================================================\n');
         },
