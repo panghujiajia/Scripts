@@ -207,7 +207,7 @@ async function read(item) {
 }
 
 async function forward(item) {
-    const url = `${baseUrl}/private/newCommunity/article/v1/forward`;
+    const url = `${baseUrl}/public/newCommunity/article/v1/forward`;
     const reqBody = { articleId: item.id, idpUserId };
 
     const myRequest = {
