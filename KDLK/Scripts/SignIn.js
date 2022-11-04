@@ -87,6 +87,7 @@ async function getSigninInfo(success) {
                     `累计签到${signCount}天，已连续签到${continuousDay}天`
                 );
             }
+            return $.done();
         }
     } catch (error) {
         $.log(`Error：\n${error}`);

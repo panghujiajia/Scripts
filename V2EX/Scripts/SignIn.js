@@ -74,6 +74,7 @@ async function getSigninInfo(success) {
             } else {
                 $.notify(`今日已签到！`, `已连续签到${continueDays}天`);
             }
+            return $.done();
         }
     } catch (error) {
         $.log(`Error：\n${error}`);

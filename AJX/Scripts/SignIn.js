@@ -94,6 +94,7 @@ async function getSigninInfo(success) {
                     `已连续签到${continueDays}天，今日签到排名${signRanKing}`
                 );
             }
+            return $.done();
         }
     } catch (error) {
         $.log(`Error：\n${error}`);

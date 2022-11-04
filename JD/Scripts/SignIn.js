@@ -19,7 +19,7 @@ async function getSignin() {
         const myRequest = {
             url: JD_URL,
             method: 'GET',
-            headers: JSON.parse(JD_HEADERS)
+            headers: JD_HEADERS
         };
         const res = await $.request(myRequest);
         if (res.indexOf('"code":"0"') > -1) {
