@@ -1,20 +1,17 @@
-/**
- * 安吉星签到脚本
- */
+// prettier-ignore
+class Tool{constructor(title){const isNode='undefined'!==typeof module&&!!module.exports&&'node';const isQuanX='undefined'!==typeof $task&&'quanx';const ENV=isNode||isQuanX;this.ENV=ENV;this.title=title||'📣📣📣';this.log(`脚本应用：${this.title}\n脚本环境：${ENV}`)}request(options){return this[`_${this.ENV}`]().request(options)}done(){return this[`_${this.ENV}`]().done()}notify(subTitle,detail){return this[`_${this.ENV}`]().notify([subTitle,detail])}getStore(key){return this[`_${this.ENV}`]().store.get(key)}setStore(key,value){return this[`_${this.ENV}`]().store.set(key,value)}log(value){console.log(`\n📔📔📔Log Start📔📔📔\n`);try{console.log(`日志内容类型：${typeof value}`);if(typeof value!=='string'){if(typeof value==='object'){console.log(JSON.stringify(value))}else{console.log(value)}}else{console.log(value)}}catch(error){console.log('\n================LOG ERROR================\n');console.log(error);console.log('\n');console.log(value)}console.log(`\n📔📔📔Log End📔📔📔\n`)}_node(){let{localStorage,axios,log,title}=this;if(!localStorage){let LocalStorage=require('node-localstorage').LocalStorage;const local=new LocalStorage('./store');localStorage=local;this.localStorage=local}if(!axios){const ax=require('axios');axios=ax;this.axios=ax}return{request:async options=>{try{log(`接口请求参数：${JSON.stringify(options)}`);const response=await axios(options);const{status,data}=response;log(`接口响应结果：${JSON.stringify(response)}`);if(status!==200){return Promise.reject(response)}return Promise.resolve(data)}catch(error){log(`接口响应错误：${JSON.stringify(error)}`);return Promise.reject(error)}},notify:options=>{options.filter(item=>!!item);log(`${title}\n${options.join('\n')}`)},store:{get:key=>{let value=localStorage.getItem(key);try{value=JSON.parse(value)}catch(error){}return value},set:(key,value)=>{if(typeof value==='object'){value=JSON.stringify(value)}localStorage.setItem(key,value)}},done:()=>{log('Node done')}}}_quanx(){let{log,title}=this;return{request:async options=>{try{log(`接口请求参数：${JSON.stringify(options)}`);const response=await $task.fetch(options);const{statusCode,body}=response;log(`接口响应结果：${JSON.stringify(response)}`);if(statusCode!==200){return Promise.reject(response)}return Promise.resolve(body)}catch(error){log(`接口响应错误：${JSON.stringify(error)}`);return Promise.reject(error)}},notify:options=>{switch(options.length){case 1:$notify(title,options[0]);break;case 2:$notify(title,options[0],options[1]);break;default:break}},store:{get:key=>{let value=$prefs.valueForKey(key);try{value=JSON.parse(value)}catch(error){}return value},set:(key,value)=>{if(typeof value==='object'){value=JSON.stringify(value)}$prefs.setValueForKey(value,key)}},done:()=>{log('Quanx done');$done()}}}}
 
-const AJX_COOKIE = $prefs.valueForKey('AJX_COOKIE');
-const AJX_TOKEN = $prefs.valueForKey('AJX_TOKEN');
-console.log('\n================================================\n');
-console.log(`Cookie：${AJX_COOKIE}`);
-console.log('\n================================================\n');
+const $ = new Tool('安吉星');
+
+const AJX_COOKIE = $.getStore('AJX_COOKIE');
+const AJX_TOKEN = $.getStore('AJX_TOKEN');
 
 if (!AJX_COOKIE || !AJX_TOKEN) {
-    $notify(
-        '安吉星',
+    $.notify(
         `Cookie读取失败！`,
         `请先打开重写，进入APP-我的-今日签到获取Cookie`
     );
-    $done();
+    return $.done();
 }
 
 const method = 'POST';
@@ -37,122 +34,69 @@ getSigninInfo();
 
 // 签到方法
 async function getSignin() {
-    const url = `${baseUrl}/userSignIn`;
-    const reqBody = `{}`;
-
-    const myRequest = {
-        url,
-        method,
-        headers,
-        body: JSON.stringify(reqBody)
-    };
-    await $task.fetch(myRequest).then(
-        async response => {
-            const { body } = response;
-
-            console.log('\n================================================\n');
-            console.log(body);
-            console.log('\n================================================\n');
-
-            const { bizCode, bizMsg } = JSON.parse(body);
-
-            if (bizCode === 'E0000') {
-                await getSigninInfo(true);
-            } else {
-                $notify('安吉星', `签到失败！`, `失败原因：${bizMsg}`);
-                console.log(
-                    '\n================================================\n'
-                );
-                console.log(`签到失败：${bizMsg}`);
-                console.log(
-                    '\n================================================\n'
-                );
-            }
-
-            $done();
-        },
-        reason => {
-            console.log('\n================================================\n');
-            console.log(reason.error);
-            console.log('\n================================================\n');
-            $done();
+    try {
+        const url = `${baseUrl}/userSignIn`;
+        const reqBody = {};
+        const myRequest = {
+            url,
+            method,
+            headers,
+            body: JSON.stringify(reqBody)
+        };
+        const res = await $.request(myRequest);
+        const { bizCode, bizMsg } = JSON.parse(res);
+        if (bizCode !== 'E0000') {
+            $.notify(`签到失败！`, `失败原因：${bizMsg}`);
+        } else {
+            await getSigninInfo(true);
         }
-    );
+        return $.done();
+    } catch (error) {
+        $.log(`Error：\n${error}`);
+        return $.done();
+    }
 }
 
 // 获取签到信息
 async function getSigninInfo(success) {
-    const url = `${baseUrl}/getUserSignInit`;
-    const reqBody = {};
-
-    const myRequest = {
-        url,
-        method: 'GET',
-        headers,
-        body: JSON.stringify(reqBody)
-    };
-    await $task.fetch(myRequest).then(
-        async response => {
-            const { body } = response;
-
-            console.log('\n================================================\n');
-            console.log(body);
-            console.log('\n================================================\n');
-
-            const {
-                data: {
-                    currentSign,
-                    continueDays,
-                    signRanKing,
-                    currentYear,
-                    currentMonth,
-                    currentDay
-                }
-            } = JSON.parse(body);
-
-            if (!currentSign) {
-                await getSignin();
+    try {
+        const url = `${baseUrl}/getUserSignInit`;
+        const reqBody = {};
+        const myRequest = {
+            url,
+            method: 'GET',
+            headers,
+            body: JSON.stringify(reqBody)
+        };
+        const res = await $.request(myRequest);
+        const {
+            data: {
+                currentSign,
+                continueDays,
+                signRanKing,
+                currentYear,
+                currentMonth,
+                currentDay
+            }
+        } = JSON.parse(res);
+        if (!currentSign) {
+            await getSignin();
+        } else {
+            $.log(`${currentYear}-${currentMonth}-${currentDay}`);
+            if (success) {
+                $.notify(
+                    `签到成功！`,
+                    `已连续签到${continueDays}天，今日签到排名${signRanKing}`
+                );
             } else {
-                console.log(
-                    '\n================================================\n'
-                );
-                console.log(`${currentYear}-${currentMonth}-${currentDay}`);
-                console.log(
-                    '\n================================================\n'
-                );
-                if (success) {
-                    $notify(
-                        '安吉星',
-                        `签到成功！`,
-                        `已连续签到${continueDays}天，今日签到排名${signRanKing}`
-                    );
-                    console.log(
-                        `已连续签到${continueDays}天，今日签到排名${signRanKing}`
-                    );
-                } else {
-                    $notify(
-                        '安吉星',
-                        `今日已签到！`,
-                        `已连续签到${continueDays}天，今日签到排名${signRanKing}`
-                    );
-                    console.log(
-                        `今日已签到！已连续签到${continueDays}天，今日签到排名${signRanKing}`
-                    );
-                }
-
-                console.log(
-                    '\n================================================\n'
+                $.notify(
+                    `今日已签到！`,
+                    `已连续签到${continueDays}天，今日签到排名${signRanKing}`
                 );
             }
-
-            $done();
-        },
-        reason => {
-            console.log('\n================================================\n');
-            console.log(reason.error);
-            console.log('\n================================================\n');
-
-            $done();
         }
-    );
+    } catch (error) {
+        $.log(`Error：\n${error}`);
+        return $.done();
+    }
 }

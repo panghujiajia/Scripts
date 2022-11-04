@@ -1,25 +1,21 @@
-/**
- * 凯迪拉克每日任务脚本
- */
+// prettier-ignore
+class Tool{constructor(title){const isNode='undefined'!==typeof module&&!!module.exports&&'node';const isQuanX='undefined'!==typeof $task&&'quanx';const ENV=isNode||isQuanX;this.ENV=ENV;this.title=title||'📣📣📣';this.log(`脚本应用：${this.title}\n脚本环境：${ENV}`)}request(options){return this[`_${this.ENV}`]().request(options)}done(){return this[`_${this.ENV}`]().done()}notify(subTitle,detail){return this[`_${this.ENV}`]().notify([subTitle,detail])}getStore(key){return this[`_${this.ENV}`]().store.get(key)}setStore(key,value){return this[`_${this.ENV}`]().store.set(key,value)}log(value){console.log(`\n📔📔📔Log Start📔📔📔\n`);try{console.log(`日志内容类型：${typeof value}`);if(typeof value!=='string'){if(typeof value==='object'){console.log(JSON.stringify(value))}else{console.log(value)}}else{console.log(value)}}catch(error){console.log('\n================LOG ERROR================\n');console.log(error);console.log('\n');console.log(value)}console.log(`\n📔📔📔Log End📔📔📔\n`)}_node(){let{localStorage,axios,log,title}=this;if(!localStorage){let LocalStorage=require('node-localstorage').LocalStorage;const local=new LocalStorage('./store');localStorage=local;this.localStorage=local}if(!axios){const ax=require('axios');axios=ax;this.axios=ax}return{request:async options=>{try{log(`接口请求参数：${JSON.stringify(options)}`);const response=await axios(options);const{status,data}=response;log(`接口响应结果：${JSON.stringify(response)}`);if(status!==200){return Promise.reject(response)}return Promise.resolve(data)}catch(error){log(`接口响应错误：${JSON.stringify(error)}`);return Promise.reject(error)}},notify:options=>{options.filter(item=>!!item);log(`${title}\n${options.join('\n')}`)},store:{get:key=>{let value=localStorage.getItem(key);try{value=JSON.parse(value)}catch(error){}return value},set:(key,value)=>{if(typeof value==='object'){value=JSON.stringify(value)}localStorage.setItem(key,value)}},done:()=>{log('Node done')}}}_quanx(){let{log,title}=this;return{request:async options=>{try{log(`接口请求参数：${JSON.stringify(options)}`);const response=await $task.fetch(options);const{statusCode,body}=response;log(`接口响应结果：${JSON.stringify(response)}`);if(statusCode!==200){return Promise.reject(response)}return Promise.resolve(body)}catch(error){log(`接口响应错误：${JSON.stringify(error)}`);return Promise.reject(error)}},notify:options=>{switch(options.length){case 1:$notify(title,options[0]);break;case 2:$notify(title,options[0],options[1]);break;default:break}},store:{get:key=>{let value=$prefs.valueForKey(key);try{value=JSON.parse(value)}catch(error){}return value},set:(key,value)=>{if(typeof value==='object'){value=JSON.stringify(value)}$prefs.setValueForKey(value,key)}},done:()=>{log('Quanx done');$done()}}}}
 
-const KDLK_APP_COOKIE = $prefs.valueForKey('KDLK_APP_COOKIE');
-const KDLK_APP_HEARDERS = $prefs.valueForKey('KDLK_APP_HEARDERS');
-const KDLK_APP_ACCESS_TOKEN = $prefs.valueForKey('KDLK_APP_ACCESS_TOKEN');
+const $ = new Tool('凯迪拉克');
 
-console.log('\n================================================\n');
-console.log(`Token：${KDLK_APP_ACCESS_TOKEN}`);
-console.log('\n================================================\n');
+const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
+const KDLK_APP_HEARDERS = $.getStore('KDLK_APP_HEARDERS');
+const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 
 if (!KDLK_APP_COOKIE || !KDLK_APP_HEARDERS || !KDLK_APP_ACCESS_TOKEN) {
-    $notify(
-        '凯迪拉克APP',
+    $.notify(
         `Cookie读取失败！`,
-        `请先打开重写，进入APP-我的页面获取Cookie`
+        `请先打开重写，进入APP-我的页面和商城页面获取Cookie`
     );
-    $done();
+    return $.done();
 }
 
-const { idpUserId, deviceId, client_id, phone } = JSON.parse(KDLK_APP_HEARDERS);
+const { idpUserId, deviceId, client_id } = KDLK_APP_HEARDERS;
 
 const method = 'POST';
 const baseUrl = 'https://app.sgmlink.com:443/service/mycadillacv3/rest/api';
@@ -50,53 +46,44 @@ const headers = {
 
 getTask();
 
-function getTask() {
-    const url = `${baseUrl}/private/task/v4/getTasks`;
-    const reqBody = {};
+async function getTask() {
+    try {
+        const url = `${baseUrl}/private/task/v4/getTasks`;
+        const reqBody = {};
 
-    const myRequest = {
-        url,
-        method,
-        headers,
-        body: JSON.stringify(reqBody)
-    };
+        const myRequest = {
+            url,
+            method,
+            headers,
+            body: JSON.stringify(reqBody)
+        };
+        const res = await $.request(myRequest);
+        const { data, resultCode } = JSON.parse(res);
 
-    $task.fetch(myRequest).then(
-        async response => {
-            const { body } = response;
-
-            const { data, resultCode } = JSON.parse(body);
-
-            const { taskGroups } = data;
-            if (resultCode === '0000') {
-                const task = taskGroups.find(item => item.taskGroup === 'DAY');
-                if (task) {
-                    // FINISHED 完成任务但没领奖
-                    // RECEIVED 完成任务并已领奖
-                    // UNFINISHED 没有完成
-                    const list = task.tasks.filter(
-                        i => i.status !== 'RECEIVED'
-                    );
-
-                    const len = list.length;
-                    if (!len) {
-                        $notify('凯迪拉克', `任务失败！`, `今日任务已做完！`);
-                        console.log(`任务失败！今日任务已做完！`);
-                    } else {
-                        for (let i = 0; i < len; i++) {
-                            const item = list[i];
-                            await doTask(item);
-                        }
+        const { taskGroups } = data;
+        if (resultCode === '0000') {
+            const task = taskGroups.find(item => item.taskGroup === 'DAY');
+            if (task) {
+                // FINISHED 完成任务但没领奖
+                // RECEIVED 完成任务并已领奖
+                // UNFINISHED 没有完成
+                const list = task.tasks.filter(i => i.status !== 'RECEIVED');
+                const len = list.length;
+                if (!len) {
+                    $.notify(`任务失败！`, `今日任务已做完！`);
+                } else {
+                    for (let i = 0; i < len; i++) {
+                        const item = list[i];
+                        await doTask(item);
                     }
                 }
             }
-            $done();
-        },
-        reason => {
-            console.log(reason.error);
-            $done();
         }
-    );
+        return $.done();
+    } catch (error) {
+        $.log(`Error：\n${error}`);
+        return $.done();
+    }
 }
 
 async function doTask(item) {
@@ -109,167 +96,121 @@ async function doTask(item) {
 }
 
 async function getList(type) {
-    const url = `${baseUrl}/public/newCommunity/article/v4/getArticles`;
-    const reqBody = {
-        limit: '10',
-        scope: 'ALL',
-        idpUserId,
-        category: 'RECOMMEND',
-        skip: '0'
-    };
-
-    const myRequest = {
-        url,
-        method,
-        headers,
-        body: JSON.stringify(reqBody)
-    };
-
-    await $task.fetch(myRequest).then(
-        async response => {
-            const { body } = response;
-            const { data } = JSON.parse(body);
-            if (data.length) {
-                for (let i = 0; i < data.length; i++) {
-                    const item = data[i];
-                    if (type === 'KD_FORWARD') {
-                        await forward(item);
-                    }
-                    if (type === 'KD_BROWSE') {
-                        await read(item);
-                    }
-                    if (type === 'KD_PRAISE') {
-                        await like(item, 'CANCEL');
-                        await like(item, 'PRAISED');
-                    }
+    try {
+        const url = `${baseUrl}/public/newCommunity/article/v4/getArticles`;
+        const reqBody = {
+            limit: '10',
+            scope: 'ALL',
+            idpUserId,
+            category: 'RECOMMEND',
+            skip: '0'
+        };
+        const myRequest = {
+            url,
+            method,
+            headers,
+            body: JSON.stringify(reqBody)
+        };
+        const res = await $.request(myRequest);
+        const { data } = JSON.parse(res);
+        if (data.length) {
+            for (let i = 0; i < data.length; i++) {
+                const item = data[i];
+                if (type === 'KD_FORWARD') {
+                    await forward(item);
                 }
-                await getPrize(type);
+                if (type === 'KD_BROWSE') {
+                    await read(item);
+                }
+                if (type === 'KD_PRAISE') {
+                    await like(item, 'CANCEL');
+                    await like(item, 'PRAISED');
+                }
             }
-        },
-        reason => {
-            console.log(reason.error);
+            await getPrize(type);
         }
-    );
+    } catch (error) {
+        $.log(`Error：\n${error}`);
+        return $.done();
+    }
 }
 
 async function like(item, type) {
-    const url = `${baseUrl}/private/newCommunity/article/v1/praise`;
-    const reqBody = { articleId: item.id, praiseType: type };
-
-    const myRequest = {
-        url,
-        method,
-        headers,
-        body: JSON.stringify(reqBody)
-    };
-
-    await $task.fetch(myRequest).then(
-        response => {
-            const { body } = response;
-
-            console.log('\n================================================\n');
-            console.log(
-                `${type === 'CANCEL' ? '取赞' : '点赞'}文章：${item.title}`
-            );
-            console.log(body);
-            console.log('\n================================================\n');
-        },
-        reason => {
-            console.log(reason.error);
-        }
-    );
+    try {
+        const url = `${baseUrl}/private/newCommunity/article/v1/praise`;
+        const reqBody = { articleId: item.id, praiseType: type };
+        const myRequest = {
+            url,
+            method,
+            headers,
+            body: JSON.stringify(reqBody)
+        };
+        const res = await $.request(myRequest);
+    } catch (error) {
+        $.log(`Error：\n${error}`);
+        return $.done();
+    }
 }
 
 async function read(item) {
-    const url = `${baseUrl}/public/newCommunity/article/v1/read`;
-    const reqBody = { articleId: item.id };
-
-    const myRequest = {
-        url,
-        method,
-        headers,
-        body: JSON.stringify(reqBody)
-    };
-
-    await $task.fetch(myRequest).then(
-        response => {
-            const { body } = response;
-
-            console.log('\n================================================\n');
-            console.log(`阅读文章：${item.title}`);
-            console.log(body);
-            console.log('\n================================================\n');
-        },
-        reason => {
-            console.log(reason.error);
-        }
-    );
+    try {
+        const url = `${baseUrl}/public/newCommunity/article/v1/read`;
+        const reqBody = { articleId: item.id };
+        const myRequest = {
+            url,
+            method,
+            headers,
+            body: JSON.stringify(reqBody)
+        };
+        const res = await $.request(myRequest);
+    } catch (error) {
+        $.log(`Error：\n${error}`);
+        return $.done();
+    }
 }
 
 async function forward(item) {
-    const url = `${baseUrl}/public/newCommunity/article/v1/forward`;
-    const reqBody = { articleId: item.id, idpUserId };
-
-    const myRequest = {
-        url,
-        method,
-        headers,
-        body: JSON.stringify(reqBody)
-    };
-
-    await $task.fetch(myRequest).then(
-        response => {
-            const { body } = response;
-
-            console.log('\n================================================\n');
-            console.log(`转发文章：${item.title}`);
-            console.log(body);
-            console.log('\n================================================\n');
-        },
-        reason => {
-            console.log(reason.error);
-        }
-    );
+    try {
+        const url = `${baseUrl}/public/newCommunity/article/v1/forward`;
+        const reqBody = { articleId: item.id, idpUserId };
+        const myRequest = {
+            url,
+            method,
+            headers,
+            body: JSON.stringify(reqBody)
+        };
+        const res = await $.request(myRequest);
+    } catch (error) {
+        $.log(`Error：\n${error}`);
+        return $.done();
+    }
 }
 
 async function getPrize(type) {
-    const url = `${baseUrl}/private/task/loop/v2/receiveReward`;
-    const reqBody = { id: type };
-
-    const myRequest = {
-        url,
-        method,
-        headers,
-        body: JSON.stringify(reqBody)
-    };
-
-    await $task.fetch(myRequest).then(
-        response => {
-            const { body } = response;
-
-            const { resultCode, message } = JSON.parse(body);
-
-            console.log('\n================================================\n');
-            console.log(body);
-            const textObj = {
-                KD_BROWSE: '浏览文章',
-                KD_PRAISE: '点赞文章',
-                KD_FORWARD: '转发文章'
-            };
-
-            const text = textObj[type];
-
-            if (resultCode !== '0000') {
-                $notify('凯迪拉克', `${text}任务失败！`, `${message}`);
-                console.log(`${text}任务失败！${message}`);
-            } else {
-                $notify('凯迪拉克', `${text}任务成功！`);
-                console.log(`${text}任务成功！`);
-            }
-            console.log('\n================================================\n');
-        },
-        reason => {
-            console.log(reason.error);
+    try {
+        const url = `${baseUrl}/private/task/loop/v2/receiveReward`;
+        const reqBody = { id: type };
+        const myRequest = {
+            url,
+            method,
+            headers,
+            body: JSON.stringify(reqBody)
+        };
+        const res = await $.request(myRequest);
+        const { resultCode, message } = JSON.parse(res);
+        const textObj = {
+            KD_BROWSE: '浏览文章',
+            KD_PRAISE: '点赞文章',
+            KD_FORWARD: '转发文章'
+        };
+        const text = textObj[type];
+        if (resultCode !== '0000') {
+            $.notify(`${text}任务失败！`, `${message}`);
+        } else {
+            $.notify('凯迪拉克', `${text}任务成功！`);
         }
-    );
+    } catch (error) {
+        $.log(`Error：\n${error}`);
+        return $.done();
+    }
 }
