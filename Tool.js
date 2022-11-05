@@ -39,25 +39,25 @@ class Tool {
     }
     // 日志
     log(value) {
-        console.log(`\n📔📔📔Log Start📔📔📔\n`);
+        console.log(`\n📔📔📔📔📔📔📔📔📔Log Start📔📔📔📔📔📔📔📔📔\n`);
         try {
-            console.log(`日志内容类型：${typeof value}`);
+            console.log(`\n日志内容类型：${typeof value}`);
             if (typeof value !== 'string') {
                 if (typeof value === 'object') {
-                    console.log(JSON.stringify(value));
+                    console.log(`\n${JSON.stringify(value)}`);
                 } else {
-                    console.log(value);
+                    console.log(`\n${value}`);
                 }
             } else {
-                console.log(value);
+                console.log(`\n${value}`);
             }
         } catch (error) {
             console.log('\n================LOG ERROR================\n');
-            console.log(error);
+            console.log(`\n${error}`);
             console.log('\n');
             console.log(value);
         }
-        console.log(`\n📔📔📔Log End📔📔📔\n`);
+        console.log(`\n📔📔📔📔📔📔📔📔📔Log End📔📔📔📔📔📔📔📔📔\n`);
     }
     _node() {
         let { localStorage, axios, log, title } = this;
@@ -75,10 +75,12 @@ class Tool {
         return {
             request: async options => {
                 try {
-                    log(`接口请求参数：${JSON.stringify(options)}`);
                     const response = await axios(options);
                     const { status, data } = response;
-                    log(`接口响应结果：${JSON.stringify(response)}`);
+                    log(
+                        `接口请求参数：${JSON.stringify(options)}\n
+                        接口响应结果：${JSON.stringify(response)}`
+                    );
                     if (status !== 200) {
                         return Promise.reject(response);
                     }
@@ -117,10 +119,12 @@ class Tool {
         return {
             request: async options => {
                 try {
-                    log(`接口请求参数：${JSON.stringify(options)}`);
                     const response = await $task.fetch(options);
                     const { statusCode, body } = response;
-                    log(`接口响应结果：${JSON.stringify(response)}`);
+                    log(
+                        `接口请求参数：${JSON.stringify(options)}\n
+                        接口响应结果：${JSON.stringify(response)}`
+                    );
                     if (statusCode !== 200) {
                         return Promise.reject(response);
                     }
