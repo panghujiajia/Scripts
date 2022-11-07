@@ -20,6 +20,6 @@ try {
     $.notify(`Cookie写入成功！`);
     return $.done();
 } catch (err) {
-    $.log(`Error：\n${error}`);
+    $.log(`Error：\n${JSON.stringify(error)}`);
     return $.done();
 }

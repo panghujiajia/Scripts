@@ -52,7 +52,7 @@ async function getSignin() {
         }
         return $.done();
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }
@@ -97,7 +97,7 @@ async function getSigninInfo(success) {
             return $.done();
         }
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }

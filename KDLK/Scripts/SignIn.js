@@ -45,7 +45,7 @@ async function getSignin() {
             $.notify(`签到失败！`, `失败原因：${msg}`);
         }
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }
@@ -90,7 +90,7 @@ async function getSigninInfo(success) {
             return $.done();
         }
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }

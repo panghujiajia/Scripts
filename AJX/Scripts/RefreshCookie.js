@@ -47,7 +47,8 @@ async function refreshAppCookie() {
         }
         return $.done();
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
+        $.notify(`Cookie刷新失败！`, JSON.stringify(error));
         return $.done();
     }
 }
@@ -84,7 +85,8 @@ async function refreshAppToken() {
             await refreshAppCookie();
         }
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
+        $.notify(`Cookie刷新失败！`, JSON.stringify(error));
         return $.done();
     }
 }

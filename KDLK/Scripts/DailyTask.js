@@ -81,7 +81,7 @@ async function getTask() {
         }
         return $.done();
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }
@@ -130,7 +130,7 @@ async function getList(type) {
             await getPrize(type);
         }
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }
@@ -147,7 +147,7 @@ async function like(item, type) {
         };
         const res = await $.request(myRequest);
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }
@@ -164,7 +164,7 @@ async function read(item) {
         };
         const res = await $.request(myRequest);
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }
@@ -181,7 +181,7 @@ async function forward(item) {
         };
         const res = await $.request(myRequest);
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }
@@ -210,7 +210,7 @@ async function getPrize(type) {
             $.notify(`${text}任务成功！`);
         }
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }

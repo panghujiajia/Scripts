@@ -67,7 +67,7 @@ async function refreshAppToken() {
         }
         await refreshStoreCookie();
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }
@@ -103,7 +103,7 @@ async function refreshStoreCookie() {
         }
         return $.done();
     } catch (error) {
-        $.log(`Error：\n${error}`);
+        $.log(`Error：\n${JSON.stringify(error)}`);
         return $.done();
     }
 }
