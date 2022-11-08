@@ -11,7 +11,7 @@ try {
         $.notify(`Cookie获取失败！`);
         return $.done();
     }
-    const bodyArr = body.split('&');
+    const bodyArr = decodeURIComponent(body).split('&');
     const params = {};
     for (let i = 0; i < bodyArr.length; i++) {
         const item = bodyArr[i];
