@@ -9,6 +9,10 @@ if (!WPH_URL || !WPH_BODY || !WPH_COOKIE) {
     return $.done();
 }
 
+$.log(WPH_URL);
+$.log(WPH_BODY);
+$.log(WPH_COOKIE);
+
 refreshAppToken();
 
 async function refreshAppToken() {
