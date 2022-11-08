@@ -4,7 +4,7 @@ const KDLK_STORE_COOKIE = $.getStore('KDLK_STORE_COOKIE');
 
 if (!KDLK_STORE_COOKIE) {
     $.notify(`Cookie读取失败！`, `请先打开重写，进入APP-商城页面获取Cookie`);
-    $.done();
+    return $.done();
 }
 
 const method = 'POST';
@@ -43,7 +43,7 @@ async function getSignin() {
         }
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        $.done();
+        return $.done();
     }
 }
 
@@ -84,11 +84,11 @@ async function getSigninInfo(success) {
                     `累计签到${signCount}天，已连续签到${continuousDay}天`
                 );
             }
-            $.done();
+            return $.done();
         }
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        $.done();
+        return $.done();
     }
 }
 

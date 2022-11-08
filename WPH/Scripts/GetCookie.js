@@ -4,30 +4,28 @@ try {
     const { headers, method, url, body } = $request;
     const { Cookie } = headers;
     if (method !== 'POST') {
-        $.done();
+        return $.done();
     }
     if (!Cookie) {
         $.log(`获取Cookie失败：${JSON.stringify(headers)}`);
         $.notify(`Cookie获取失败！`);
-        $.done();
+        return $.done();
     }
-    $.log(body);
     const bodyArr = body.split('&');
     const params = {};
-    for (let i = 0; i < keyVal.length; i++) {
+    for (let i = 0; i < bodyArr.length; i++) {
         const item = bodyArr[i];
         const keyVal = item.split('=');
         params[keyVal[0]] = keyVal[1];
     }
-    $.log(params);
     $.setStore('WPH_URL', url);
     $.setStore('WPH_BODY', params);
     $.setStore('WPH_COOKIE', Cookie);
     $.notify(`Cookie写入成功！`);
-    $.done();
+    return $.done();
 } catch (err) {
     $.log(`Error：\n${JSON.stringify(error)}`);
-    $.done();
+    return $.done();
 }
 
 // prettier-ignore

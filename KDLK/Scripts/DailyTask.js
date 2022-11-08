@@ -9,7 +9,7 @@ if (!KDLK_APP_COOKIE || !KDLK_APP_HEARDERS || !KDLK_APP_ACCESS_TOKEN) {
         `Cookie读取失败！`,
         `请先打开重写，进入APP-我的页面和商城页面获取Cookie`
     );
-    $.done();
+    return $.done();
 }
 
 const { idpUserId, deviceId, client_id } = KDLK_APP_HEARDERS;
@@ -76,10 +76,10 @@ async function getTask() {
                 }
             }
         }
-        $.done();
+        return $.done();
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        $.done();
+        return $.done();
     }
 }
 
@@ -128,7 +128,7 @@ async function getList(type) {
         }
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        $.done();
+        return $.done();
     }
 }
 
@@ -145,7 +145,7 @@ async function like(item, type) {
         const res = await $.request(myRequest);
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        $.done();
+        return $.done();
     }
 }
 
@@ -162,7 +162,7 @@ async function read(item) {
         const res = await $.request(myRequest);
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        $.done();
+        return $.done();
     }
 }
 
@@ -179,7 +179,7 @@ async function forward(item) {
         const res = await $.request(myRequest);
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        $.done();
+        return $.done();
     }
 }
 
@@ -208,7 +208,7 @@ async function getPrize(type) {
         }
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        $.done();
+        return $.done();
     }
 }
 

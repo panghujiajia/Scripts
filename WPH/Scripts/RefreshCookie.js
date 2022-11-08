@@ -6,7 +6,7 @@ const WPH_COOKIE = $.getStore('WPH_COOKIE');
 
 if (!WPH_URL || !WPH_BODY || !WPH_COOKIE) {
     $.notify(`Cookie读取失败！`, `请先打开重写，进入唯品会获取Cookie`);
-    $.done();
+    return $.done();
 }
 
 $.log(WPH_URL);
@@ -46,10 +46,10 @@ async function refreshAppToken() {
         if (code !== 1) {
             $.notify(`Cookie刷新失败！`, res);
         }
-        $.done();
+        return $.done();
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        $.done();
+        return $.done();
     }
 }
 

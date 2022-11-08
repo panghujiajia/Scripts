@@ -8,7 +8,7 @@ if (!AJX_COOKIE || !AJX_TOKEN) {
         `Cookie读取失败！`,
         `请先打开重写，进入APP-我的-今日签到获取Cookie`
     );
-    $.done();
+    return $.done();
 }
 
 refreshAppToken();
@@ -42,11 +42,11 @@ async function refreshAppCookie() {
         if (!bizCode || bizCode !== 'E0000') {
             $.notify(`Cookie刷新失败！`, res);
         }
-        $.done();
+        return $.done();
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
         $.notify(`Cookie刷新失败！`, JSON.stringify(error));
-        $.done();
+        return $.done();
     }
 }
 async function refreshAppToken() {
@@ -77,14 +77,14 @@ async function refreshAppToken() {
         const res = await $.request(myRequest);
         if (res.indexOf('车况') < 0) {
             $.notify(`Cookie刷新失败！`, res);
-            $.done();
+            return $.done();
         } else {
             await refreshAppCookie();
         }
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
         $.notify(`Cookie刷新失败！`, JSON.stringify(error));
-        $.done();
+        return $.done();
     }
 }
 

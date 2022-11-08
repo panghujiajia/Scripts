@@ -17,7 +17,7 @@ if (
     !KDLK_APP_REFRESH_ACCESS_TOKEN
 ) {
     $.notify(`Cookie读取失败！`, `请先打开重写，进入APP获取Cookie`);
-    $.done();
+    return $.done();
 }
 
 refreshAppToken();
@@ -65,7 +65,7 @@ async function refreshAppToken() {
         await refreshStoreCookie();
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        $.done();
+        return $.done();
     }
 }
 
@@ -98,10 +98,10 @@ async function refreshStoreCookie() {
         if (!IS_LOGIN || IS_LOGIN !== 'Y') {
             $.notify(`商城Cookie刷新失败！`, res);
         }
-        $.done();
+        return $.done();
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        $.done();
+        return $.done();
     }
 }
 
