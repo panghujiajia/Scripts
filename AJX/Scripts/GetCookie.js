@@ -14,7 +14,7 @@ try {
     $.notify(`Cookie写入成功！`);
     return $.done();
 } catch (error) {
-    $.log(`Error：\n${JSON.stringify(error)}`);
+    $.log(`Error：\n${typeof error === 'object' ? JSON.stringify(error) : error}`);
     return $.done();
 }
 

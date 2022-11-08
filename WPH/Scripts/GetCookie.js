@@ -2,11 +2,11 @@ const $ = new Tool('唯品会');
 
 try {
     const { headers, method, url, body } = $request;
-    const { Cookie } = headers;
+    const { Cookie, Authorization } = headers;
     if (method !== 'POST') {
         return $.done();
     }
-    if (!Cookie) {
+    if (!Cookie || !Authorization) {
         $.log(`获取Cookie失败：${JSON.stringify(headers)}`);
         $.notify(`Cookie获取失败！`);
         return $.done();
@@ -20,11 +20,18 @@ try {
     }
     $.setStore('WPH_URL', url);
     $.setStore('WPH_BODY', params);
-    $.setStore('WPH_COOKIE', Cookie);
+    $.setStore('WPH_HEADERS', headers);
+    $.log(
+        `headers：${JSON.stringify(
+            headers
+        )}\nurl：${url}\nparams：${JSON.stringify(params)}`
+    );
     $.notify(`Cookie写入成功！`);
     return $.done();
 } catch (err) {
-    $.log(`Error：\n${JSON.stringify(error)}`);
+    $.log(
+        `Error：\n${typeof error === 'object' ? JSON.stringify(error) : error}`
+    );
     return $.done();
 }
 
