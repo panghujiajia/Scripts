@@ -11,6 +11,7 @@ try {
         $.notify(`Cookie获取失败！`);
         return $.done();
     }
+    $.log(body);
     const bodyArr = body.split('&');
     const params = {};
     for (let i = 0; i < keyVal.length; i++) {
@@ -18,6 +19,7 @@ try {
         const keyVal = item.split('=');
         params[keyVal[0]] = keyVal[1];
     }
+    $.log(params);
     $.setStore('WPH_URL', url);
     $.setStore('WPH_BODY', params);
     $.setStore('WPH_COOKIE', Cookie);
