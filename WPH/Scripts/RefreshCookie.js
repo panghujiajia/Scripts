@@ -6304,22 +6304,23 @@ refreshAppToken();
 async function refreshAppToken() {
     try {
         const method = `POST`;
-        $.log(WPH_URL.split('?')[0]);
-        $.log(sign);
+        const params = WPH_BODY;
         const Authorization = sign.getSign(
             WPH_URL.split('?')[0],
-            WPH_BODY,
+            params,
             WPH_HEADERS.Cookie
         );
-        $.log(Authorization);
+        let body = '';
+        for (i in params) {
+            body += `${i}=${params[i]}&`;
+        }
         const myRequest = {
             url: WPH_URL,
             method: method,
             headers: { ...WPH_HEADERS, Authorization },
-            body: WPH_BODY
+            body
         };
         const res = await $.request(myRequest);
-        $.log(res);
         const { code } = JSON.parse(res);
         if (code !== 1) {
             $.notify(`Cookie刷新失败！`, res);

@@ -6305,11 +6305,16 @@ async function getSignin() {
         const url = WPH_URL.replace('info', 'exec');
         // 签到接口多一个这个参数
         // actId=fJSwqhdrFME
+        const params = { ...WPH_BODY, actId: 'fJSwqhdrFME' };
         const Authorization = sign.getSign(
             url.split('?')[0],
-            { ...WPH_BODY, actId: 'fJSwqhdrFME' },
+            params,
             WPH_HEADERS.Cookie
         );
+        let body = '';
+        for (i in params) {
+            body += `${i}=${params[i]}&`;
+        }
         const myRequest = {
             url,
             method,
@@ -6317,15 +6322,11 @@ async function getSignin() {
                 ...WPH_HEADERS,
                 Authorization
             },
-            body: { ...WPH_BODY, actId: 'fJSwqhdrFME' }
+            body
         };
         const res = await $.request(myRequest);
-        const { code, msg } = JSON.parse(res);
-        if (code === 1) {
-            await getSigninInfo(true);
-        } else {
-            $.notify(`签到失败！`, `${msg}`);
-        }
+        const { code } = JSON.parse(res);
+        await getSigninInfo(code === 1);
         return $.done();
     } catch (error) {
         $.log(
@@ -6341,11 +6342,16 @@ async function getSignin() {
 async function getSigninInfo(success) {
     try {
         const url = WPH_URL;
+        const params = WPH_BODY;
         const Authorization = sign.getSign(
             url.split('?')[0],
-            WPH_BODY,
+            params,
             WPH_HEADERS.Cookie
         );
+        let body = '';
+        for (i in params) {
+            body += `${i}=${params[i]}&`;
+        }
         const myRequest = {
             url,
             method,
@@ -6353,7 +6359,7 @@ async function getSigninInfo(success) {
                 ...WPH_HEADERS,
                 Authorization
             },
-            body: WPH_BODY
+            body
         };
         const res = await $.request(myRequest);
         const {
