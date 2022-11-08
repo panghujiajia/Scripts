@@ -8,7 +8,7 @@ if (!AJX_COOKIE || !AJX_TOKEN) {
         `Cookie读取失败！`,
         `请先打开重写，进入APP-我的-今日签到获取Cookie`
     );
-    return $.done();
+    $.done();
 }
 
 const method = 'POST';
@@ -47,10 +47,10 @@ async function getSignin() {
         } else {
             await getSigninInfo(true);
         }
-        return $.done();
+        $.done();
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        return $.done();
+        $.done();
     }
 }
 
@@ -91,11 +91,11 @@ async function getSigninInfo(success) {
                     `已连续签到${continueDays}天，今日签到排名${signRanKing}`
                 );
             }
-            return $.done();
+            $.done();
         }
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        return $.done();
+        $.done();
     }
 }
 

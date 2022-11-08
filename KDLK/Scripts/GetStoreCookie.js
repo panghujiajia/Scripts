@@ -6,15 +6,15 @@ try {
     if (!Cookie) {
         $.log(`获取Cookie失败：${JSON.stringify(headers)}`);
         $.notify(`Cookie获取失败！`);
-        return $.done();
+        $.done();
     }
     $.setStore('KDLK_STORE_COOKIE', Cookie);
     $.log(`Cookie：${Cookie}`);
     $.notify(`Cookie写入成功！`);
-    return $.done();
+    $.done();
 } catch (err) {
     $.log(`Error：\n${JSON.stringify(error)}`);
-    return $.done();
+    $.done();
 }
 
 // prettier-ignore

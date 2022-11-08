@@ -26,10 +26,10 @@ try {
         $.setStore('KDLK_APP_COOKIE', Cookie);
     }
     notify();
-    return $.done();
+    $.done();
 } catch (err) {
     $.log(`Error：\n${JSON.stringify(error)}`);
-    return $.done();
+    $.done();
 }
 
 function notify() {

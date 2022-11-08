@@ -4,12 +4,12 @@ try {
     const { headers, method, url, body } = $request;
     const { Cookie } = headers;
     if (method !== 'POST') {
-        return $.done();
+        $.done();
     }
     if (!Cookie) {
         $.log(`获取Cookie失败：${JSON.stringify(headers)}`);
         $.notify(`Cookie获取失败！`);
-        return $.done();
+        $.done();
     }
     $.log(body);
     const bodyArr = body.split('&');
@@ -24,10 +24,10 @@ try {
     $.setStore('WPH_BODY', params);
     $.setStore('WPH_COOKIE', Cookie);
     $.notify(`Cookie写入成功！`);
-    return $.done();
+    $.done();
 } catch (err) {
     $.log(`Error：\n${JSON.stringify(error)}`);
-    return $.done();
+    $.done();
 }
 
 // prettier-ignore

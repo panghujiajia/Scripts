@@ -6,15 +6,15 @@ try {
     if (!Cookie || Cookie.indexOf('A2=') < 0) {
         $.log(`获取Cookie失败：${JSON.stringify(headers)}`);
         $.notify(`Cookie获取失败！`);
-        return $.done();
+        $.done();
     }
     $.setStore('V2EX_COOKIE', Cookie);
     $.log(`Cookie：${Cookie}`);
     $.notify(`Cookie写入成功！`);
-    return $.done();
+    $.done();
 } catch (err) {
     $.log(`Error：\n${JSON.stringify(error)}`);
-    return $.done();
+    $.done();
 }
 
 // prettier-ignore

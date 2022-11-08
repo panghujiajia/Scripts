@@ -5,7 +5,7 @@ const JD_HEADERS = $.getStore('JD_HEADERS');
 
 if (!JD_HEADERS || !JD_URL) {
     $.notify(`Cookie读取失败！`, `请先打开重写，进入APP手动签到一次获取Cookie`);
-    return $.done();
+    $.done();
 }
 
 getSignin();
@@ -33,10 +33,10 @@ async function getSignin() {
         } else {
             $.notify(`签到失败！`, `${res}`);
         }
-        return $.done();
+        $.done();
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        return $.done();
+        $.done();
     }
 }
 

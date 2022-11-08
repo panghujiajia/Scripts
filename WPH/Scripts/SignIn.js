@@ -6198,7 +6198,7 @@ const WPH_COOKIE = $.getStore('WPH_COOKIE');
 
 if (!WPH_URL || !WPH_BODY || !WPH_COOKIE) {
     $.notify(`Cookie读取失败！`, `请先打开重写，进入唯品会获取Cookie`);
-    return $.done();
+    $.done();
 }
 
 const method = 'POST';
@@ -6244,10 +6244,10 @@ async function getSignin() {
         } else {
             $.notify(`签到失败！`, `${msg}`);
         }
-        return $.done();
+        $.done();
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        return $.done();
+        $.done();
     }
 }
 
@@ -6286,7 +6286,7 @@ async function getSigninInfo(success) {
         }
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        return $.done();
+        $.done();
     }
 }
 

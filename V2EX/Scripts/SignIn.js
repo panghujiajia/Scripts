@@ -4,7 +4,7 @@ const V2EX_COOKIE = $.getStore('V2EX_COOKIE');
 
 if (!V2EX_COOKIE) {
     $.notify(`Cookie读取失败！`, `请先打开重写，进入V2EX获取Cookie`);
-    return $.done();
+    $.done();
 }
 
 const method = 'GET';
@@ -40,10 +40,10 @@ async function getSignin(code) {
         } else {
             $.notify(`签到失败！`, `今天已签到`);
         }
-        return $.done();
+        $.done();
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        return $.done();
+        $.done();
     }
 }
 
@@ -71,11 +71,11 @@ async function getSigninInfo(success) {
             } else {
                 $.notify(`今日已签到！`, `已连续签到${continueDays}天`);
             }
-            return $.done();
+            $.done();
         }
     } catch (error) {
         $.log(`Error：\n${JSON.stringify(error)}`);
-        return $.done();
+        $.done();
     }
 }
 
