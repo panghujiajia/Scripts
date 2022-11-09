@@ -40,7 +40,7 @@ function Tool(title) {
         }
         // 日志
         log(value) {
-            console.log(`\n📔📔📔📔📔📔📔📔📔Log Start📔📔📔📔📔📔📔📔📔\n`);
+            console.log(`\n📔📔📔📔📔📔📔Log Start📔📔📔📔📔📔📔\n`);
             try {
                 console.log(`\n日志内容类型：${typeof value}`);
                 if (typeof value !== 'string') {
@@ -58,7 +58,7 @@ function Tool(title) {
                 console.log('\n');
                 console.log(value);
             }
-            console.log(`\n📔📔📔📔📔📔📔📔📔Log End📔📔📔📔📔📔📔📔📔\n`);
+            console.log(`\n📔📔📔📔📔📔📔Log End📔📔📔📔📔📔📔\n`);
         }
         _node() {
             let { localStorage, fetch, log, title } = this;
@@ -93,7 +93,9 @@ function Tool(title) {
                         }
                         return Promise.resolve(data);
                     } catch (error) {
-                        log(`接口响应错误：${JSON.stringify(error)}`);
+                        log(
+                            `接口响应错误：\n${error}\n${JSON.stringify(error)}`
+                        );
                         return Promise.reject(error);
                     }
                 },
@@ -137,7 +139,9 @@ function Tool(title) {
                         }
                         return Promise.resolve(body);
                     } catch (error) {
-                        log(`接口响应错误：${JSON.stringify(error)}`);
+                        log(
+                            `接口响应错误：\n${error}\n${JSON.stringify(error)}`
+                        );
                         return Promise.reject(error);
                     }
                 },

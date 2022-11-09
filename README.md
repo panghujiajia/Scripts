@@ -13,7 +13,7 @@
 
 -   自动签到
 
-### ~~[唯品会](https://github.com/panghujiajia/QuantumultX/tree/master/WPH)~~ `接口有签名校验，暂不可用，内附唯品会的签名方法，有大佬解了麻烦告诉我一下`
+### [唯品会](https://github.com/panghujiajia/QuantumultX/tree/master/WPH)
 
 -   自动签到
 
