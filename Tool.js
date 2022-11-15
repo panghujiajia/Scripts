@@ -21,6 +21,13 @@ function Tool(title) {
         done() {
             return this[`_${this.ENV}`]().done();
         }
+        wait(time) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve(true);
+                }, time * 1000 || 2000);
+            });
+        }
         /**
          * 通知，主标题用实例化的入参
          * @param {*} subTitle 副标题
