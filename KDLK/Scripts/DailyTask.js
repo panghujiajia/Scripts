@@ -71,7 +71,6 @@ async function getTask() {
                 } else {
                     for (let i = 0; i < len; i++) {
                         const item = list[i];
-                        await $.wait();
                         await doTask(item);
                     }
                 }
@@ -95,6 +94,7 @@ async function doTask(item) {
 
 async function getList(type) {
     try {
+        await $.wait();
         const url = `${baseUrl}/public/newCommunity/article/v4/getArticles`;
         const reqBody = {
             limit: '10',
@@ -135,6 +135,7 @@ async function getList(type) {
 
 async function like(item, type) {
     try {
+        await $.wait();
         const url = `${baseUrl}/private/newCommunity/article/v1/praise`;
         const reqBody = { articleId: item.id, praiseType: type };
         const myRequest = {
@@ -152,6 +153,7 @@ async function like(item, type) {
 
 async function read(item) {
     try {
+        await $.wait();
         const url = `${baseUrl}/public/newCommunity/article/v1/read`;
         const reqBody = { articleId: item.id };
         const myRequest = {
@@ -169,6 +171,7 @@ async function read(item) {
 
 async function forward(item) {
     try {
+        await $.wait();
         const url = `${baseUrl}/public/newCommunity/article/v1/forward`;
         const reqBody = { articleId: item.id, idpUserId };
         const myRequest = {
@@ -186,6 +189,7 @@ async function forward(item) {
 
 async function getPrize(type) {
     try {
+        await $.wait();
         const url = `${baseUrl}/private/task/loop/v2/receiveReward`;
         const reqBody = { id: type };
         const myRequest = {
