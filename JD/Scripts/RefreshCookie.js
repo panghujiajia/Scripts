@@ -19,19 +19,8 @@ async function getSignin() {
             headers: JD_HEADERS
         };
         const res = await $.request(myRequest);
-        if (res.indexOf('"code":"0"') > -1) {
-            let beanCount = res.match(/[.]*"beanCount":"(\d+)"[.]*/)[1];
-            if (
-                res.indexOf('签到成功') > -1 ||
-                res.indexOf('恭喜您获得连签奖励') > -1
-            ) {
-                $.notify(`🎉🎉🎉签到成功！`, `本次签到获得${beanCount}京豆`);
-            }
-            if (res.indexOf('今天已签到') > -1) {
-                $.notify(`❗️❗️❗️签到失败！`, `今天已签到`);
-            }
-        } else {
-            $.notify(`❗️❗️❗️签到失败！`, `${res}`);
+        if (res.indexOf('"code":"0"') < 0) {
+            $.notify(`Cookie刷新失败！`, res);
         }
         return $.done();
     } catch (error) {

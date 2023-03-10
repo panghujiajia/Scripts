@@ -4,11 +4,11 @@
         {
             "config": "1 0 * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/AJX/Scripts/SignIn.js, tag=安吉星签到, enabled=true",
             "addons": "https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/AJX/Rewrite.conf, tag=安吉星获取COOKIE, enabled=true"
-        },
-        {
-            "config": "10/20 * * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/AJX/Scripts/RefreshCookie.js, tag=安吉星刷新COOKIE, enabled=true",
-            "addons": "https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/AJX/Rewrite.conf, tag=安吉星获取COOKIE, enabled=true"
         }
+        // {
+        //     "config": "10/20 * * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/AJX/Scripts/RefreshCookie.js, tag=安吉星刷新COOKIE, enabled=true",
+        //     "addons": "https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/AJX/Rewrite.conf, tag=安吉星获取COOKIE, enabled=true"
+        // }
     ],
     "description": "安吉星签到"
 }

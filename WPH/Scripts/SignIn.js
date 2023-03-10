@@ -6367,9 +6367,9 @@ async function getSigninInfo(success) {
             await getSignin();
         } else {
             if (success) {
-                $.notify(`签到成功！`, `已连续签到${cycleDays}天`);
+                $.notify(`🎉🎉🎉签到成功！`, `已连续签到${cycleDays}天`);
             } else {
-                $.notify(`今日已签到！`, `已连续签到${cycleDays}天`);
+                $.notify(`❗️❗️❗️今日已签到！`, `已连续签到${cycleDays}天`);
             }
         }
     } catch (error) {

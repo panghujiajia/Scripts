@@ -67,7 +67,7 @@ async function getTask() {
                 const list = task.tasks.filter(i => i.status !== 'RECEIVED');
                 const len = list.length;
                 if (!len) {
-                    $.notify(`任务失败！`, `今日任务已做完！`);
+                    $.notify(`❗️❗️❗️任务失败！`, `今日任务已做完！`);
                 } else {
                     for (let i = 0; i < len; i++) {
                         const item = list[i];
@@ -97,7 +97,7 @@ async function getList(type) {
         await $.wait();
         const url = `${baseUrl}/public/newCommunity/article/v4/getArticles`;
         const reqBody = {
-            limit: '10',
+            limit: '4',
             scope: 'ALL',
             idpUserId,
             category: 'RECOMMEND',
@@ -207,9 +207,9 @@ async function getPrize(type) {
         };
         const text = textObj[type];
         if (resultCode !== '0000') {
-            $.notify(`${text}任务失败！`, `${message}`);
+            $.notify(`❗️❗️❗️${text}任务失败！`, `${message}`);
         } else {
-            $.notify(`${text}任务成功！`);
+            $.notify(`🎉🎉🎉${text}任务成功！`);
         }
     } catch (error) {
         $.log(`Error：\n${error}\n${JSON.stringify(error)}`);

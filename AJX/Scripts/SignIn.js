@@ -43,7 +43,7 @@ async function getSignin() {
         const res = await $.request(myRequest);
         const { bizCode, bizMsg } = JSON.parse(res);
         if (bizCode !== 'E0000') {
-            $.notify(`签到失败！`, `失败原因：${bizMsg}`);
+            $.notify(`❗️❗️❗️签到失败！`, `失败原因：${bizMsg}`);
         } else {
             await getSigninInfo(true);
         }
@@ -82,12 +82,12 @@ async function getSigninInfo(success) {
             $.log(`${currentYear}-${currentMonth}-${currentDay}`);
             if (success) {
                 $.notify(
-                    `签到成功！`,
+                    `🎉🎉🎉签到成功！`,
                     `已连续签到${continueDays}天，今日签到排名${signRanKing}`
                 );
             } else {
                 $.notify(
-                    `今日已签到！`,
+                    `❗️❗️❗️今日已签到！`,
                     `已连续签到${continueDays}天，今日签到排名${signRanKing}`
                 );
             }

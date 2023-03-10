@@ -38,7 +38,7 @@ async function getSignin(code) {
         if (res.indexOf('每日登录奖励已领取') > -1) {
             await getSigninInfo(true);
         } else {
-            $.notify(`签到失败！`, `今天已签到`);
+            $.notify(`❗️❗️❗️签到失败！`, `今天已签到`);
         }
         return $.done();
     } catch (error) {
@@ -67,9 +67,9 @@ async function getSigninInfo(success) {
         } else {
             let continueDays = res.match(/已连续登录 (\d+?) 天/)[1];
             if (success) {
-                $.notify(`签到成功！`, `已连续签到${continueDays}天`);
+                $.notify(`🎉🎉🎉签到成功！`, `已连续签到${continueDays}天`);
             } else {
-                $.notify(`今日已签到！`, `已连续签到${continueDays}天`);
+                $.notify(`❗️❗️❗️今日已签到！`, `已连续签到${continueDays}天`);
             }
             return $.done();
         }

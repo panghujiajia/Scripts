@@ -39,7 +39,7 @@ async function getSignin() {
         if (code === '200') {
             await getSigninInfo(true);
         } else {
-            $.notify(`签到失败！`, `失败原因：${msg}`);
+            $.notify(`❗️❗️❗️签到失败！`, `失败原因：${msg}`);
         }
     } catch (error) {
         $.log(`Error：\n${error}\n${JSON.stringify(error)}`);
@@ -75,12 +75,12 @@ async function getSigninInfo(success) {
 
             if (success) {
                 $.notify(
-                    `签到成功！`,
+                    `🎉🎉🎉签到成功！`,
                     `本次签到获得${last}积分，累计签到${signCount}天，已连续签到${continuousDay}天`
                 );
             } else {
                 $.notify(
-                    `今日已签到！`,
+                    `❗️❗️❗️今日已签到！`,
                     `累计签到${signCount}天，已连续签到${continuousDay}天`
                 );
             }
