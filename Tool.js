@@ -47,9 +47,7 @@ function Tool(title) {
         }
         // 日志
         log(value) {
-            console.log(`\n📔📔📔📔📔📔📔Log Start📔📔📔📔📔📔📔\n`);
             try {
-                console.log(`\n日志内容类型：${typeof value}`);
                 if (typeof value !== 'string') {
                     if (typeof value === 'object') {
                         console.log(`\n${JSON.stringify(value)}`);
@@ -90,7 +88,11 @@ function Tool(title) {
                         const { url, ...rest } = options;
                         const response = await fetch(url, rest);
                         const { status } = response;
-                        const data = await response.json();
+                        const contentType = rest.headers.contentType;
+                        const data =
+                            contentType === 'text/html'
+                                ? await response.text()
+                                : await response.json();
                         log(
                             `接口请求参数：${JSON.stringify(options)}\n
                             接口响应结果：${JSON.stringify(data)}`
