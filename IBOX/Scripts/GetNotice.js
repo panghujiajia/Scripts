@@ -2,7 +2,6 @@ const $ = new Tool('Ibox');
 
 const IBOX_NOTICE_NUMBER = $.getStore('IBOX_NOTICE_NUMBER');
 
-$.log(IBOX_NOTICE_NUMBER)
 getNotice();
 
 async function getNotice() {
@@ -37,12 +36,13 @@ async function getNotice() {
         const regex = /window.__json4fe=(.*?);window/;
         res.replace(/\s/g, '').replace(regex, '');
         let { allList, byClassList, tabList } = evalJsString(RegExp.$1);
-        $.log(allList.length)
-        $.setStore('IBOX_NOTICE_NUMBER', allList.length);
+        $.setStore('IBOX_NOTICE_NUMBER', allList.length + '');
         let newNoticeNum = allList.length - IBOX_NOTICE_NUMBER;
         // 有新公告
-        if (newNoticeNum >= 0) {
-            let newNotice = allList.filter((item, index) => index < 2);
+        if (newNoticeNum > 0) {
+            let newNotice = allList.filter(
+                (item, index) => index < newNoticeNum
+            );
             for (let i = 0; i < newNotice.length; i++) {
                 const item = newNotice[i];
                 $.notify('公告通知', `${item.noticeName}`);
