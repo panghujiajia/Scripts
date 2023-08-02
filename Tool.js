@@ -1,191 +1,176 @@
-function Tool(title) {
-    return new (class {
-        constructor(title) {
-            const isNode =
-                'undefined' !== typeof module && !!module.exports && 'node';
-            const isQuanX = 'undefined' !== typeof $task && 'quanx';
+// const $ = new Tool('标题');
+// $.notify('副标题', '详情'); // 通知
+// let store = $.getStore('key'); // 读取缓存
+// $.log(store); // 打印
+// $.setStore('key', 'value'); // 设置缓存
 
-            const ENV = isNode || isQuanX;
+// async function test() {
+//     // 发起请求
+//     const res = await $.request({
+//         url: 'https://www.baidu.com',
+//         method: 'POST',
+//         headers: {
+//             contentType: 'text/html'
+//         }
+//     });
+//     $.done(res);
+// }
+// test();
 
-            this.ENV = ENV;
-            // title用作notice的标题
-            this.title = title || '📣📣📣';
+function Tool(title = '📣📣📣') {
+    const isNode = 'undefined' !== typeof module && !!module.exports && 'node';
+    const isQuanX = 'undefined' !== typeof $task && 'quanx';
+    const isSurge = 'undefined' !== typeof $httpClient && 'surge';
 
-            this.log(`脚本应用：${this.title}\n脚本环境：${ENV}`);
+    const ENV = isNode || isQuanX || isSurge;
+    // title用作notice的标题
+    this.title = title;
+
+    const adapterStatus = response => {
+        if (response) {
+            if (response.status) {
+                response['statusCode'] = response.status;
+            } else if (response.statusCode) {
+                response['status'] = response.statusCode;
+            }
         }
-        // 发起请求
-        request(options) {
-            return this[`_${this.ENV}`]().request(options);
+        return response;
+    };
+    const nodeInit = () => {
+        let { localStorage, fetch } = this;
+        if (!localStorage) {
+            let LocalStorage = require('node-localstorage').LocalStorage;
+            const local = new LocalStorage('./store');
+            localStorage = local;
         }
-        // 结束
-        done() {
-            return this[`_${this.ENV}`]().done();
+        if (!fetch) {
+            // mod.cjs
+            const fet = (...args) =>
+                import('node-fetch').then(({ default: fetch }) =>
+                    fetch(...args)
+                );
+            fetch = fet;
         }
-        wait(time) {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve(true);
-                }, time * 1000 || 2000);
+        return { localStorage, fetch };
+    };
+    // 日志
+    this.log = value => {
+        if (typeof value === 'object') {
+            console.log(`\n${JSON.stringify(value)}`);
+        } else {
+            console.log(`\n${value}`);
+        }
+    };
+    // 发起请求
+    this.request = async options => {
+        if (isQuanX) {
+            try {
+                const response = await $task.fetch(options);
+                const { status, body } = adapterStatus(response);
+                if (status !== 200) {
+                    return Promise.reject(response);
+                }
+                return Promise.resolve(body);
+            } catch (error) {
+                this.log(`接口响应错误：\n${error}\n${JSON.stringify(error)}`);
+                return Promise.reject(error);
+            }
+        }
+        if (isSurge) {
+            return new Promise((resolve, reject) => {
+                const { method } = options;
+                const httpEnum = {
+                    POST: (options, callback) => {
+                        $httpClient.post(options, (error, response, body) => {
+                            callback(error, adapterStatus(response), body);
+                        });
+                    },
+                    GET: (options, callback) => {
+                        $httpClient.get(options, (error, response, body) => {
+                            callback(error, adapterStatus(response), body);
+                        });
+                    }
+                };
+                httpEnum[method](options, (error, response, body) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    const { status } = response;
+                    if (status !== 200) {
+                        return reject(response);
+                    }
+                    return resolve(body);
+                });
             });
         }
-        /**
-         * 通知，主标题用实例化的入参
-         * @param {*} subTitle 副标题
-         * @param {*} detail 详情
-         * @returns
-         */
-        notify(subTitle, detail) {
-            return this[`_${this.ENV}`]().notify([subTitle, detail]);
-        }
-        // 取缓存
-        getStore(key) {
-            return this[`_${this.ENV}`]().store.get(key);
-        }
-        // 存缓存
-        setStore(key, value) {
-            return this[`_${this.ENV}`]().store.set(key, value);
-        }
-        // 日志
-        log(value) {
+        if (isNode) {
+            const { localStorage, fetch } = nodeInit();
             try {
-                if (typeof value !== 'string') {
-                    if (typeof value === 'object') {
-                        console.log(`\n${JSON.stringify(value)}`);
-                    } else {
-                        console.log(`\n${value}`);
-                    }
-                } else {
-                    console.log(`\n${value}`);
+                const { url, ...rest } = options;
+                const response = await fetch(url, rest);
+                const { status } = adapterStatus(response);
+                const contentType = rest.headers.contentType;
+                const data =
+                    contentType === 'text/html'
+                        ? await response.text()
+                        : await response.json();
+                if (status !== 200) {
+                    return Promise.reject(data);
                 }
+                return Promise.resolve(data);
             } catch (error) {
-                console.log('\n================LOG ERROR================\n');
-                console.log(`\n${error}`);
-                console.log('\n');
-                console.log(value);
+                this.log(`接口响应错误：\n${error}\n${JSON.stringify(error)}`);
+                return Promise.reject(error);
             }
-            console.log(`\n📔📔📔📔📔📔📔Log End📔📔📔📔📔📔📔\n`);
         }
-        _node() {
-            let { localStorage, fetch, log, title } = this;
-            if (!localStorage) {
-                let LocalStorage = require('node-localstorage').LocalStorage;
-                const local = new LocalStorage('./store');
-                localStorage = local;
-                this.localStorage = local;
+    };
+    // 结束
+    this.done = res => {
+        if (isQuanX || isSurge) $done({ res });
+        if (isNode) this.log({ res });
+    };
+    this.wait = time => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(true);
+            }, time * 1000 || 2000);
+        });
+    };
+    /**
+     * 通知，主标题用实例化的入参
+     * @param {*} subTitle 副标题
+     * @param {*} detail 详情
+     * @returns
+     */
+    this.notify = (subtitle = '', body = '') => {
+        if (isQuanX) $notify(this.title, subtitle, body);
+        if (isSurge) $notification.post(this.title, subtitle, body);
+        if (isNode) this.log(`${this.title}\n${subtitle}\n${body}`);
+    };
+    // 取缓存
+    this.getStore = key => {
+        if (isQuanX) return $prefs.valueForKey(key);
+        if (isSurge) return $persistentStore.read(key);
+        if (isNode) {
+            const { localStorage, fetch } = nodeInit();
+            let value = localStorage.getItem(key);
+            try {
+                value = JSON.parse(value);
+            } catch (error) {}
+            return value;
+        }
+    };
+    // 存缓存
+    this.setStore = (key, value) => {
+        if (isQuanX) $prefs.setValueForKey(value, key);
+        if (isSurge) $persistentStore.write(value, key);
+        if (isNode) {
+            const { localStorage, fetch } = nodeInit();
+            if (typeof value === 'object') {
+                value = JSON.stringify(value);
             }
-            if (!fetch) {
-                // mod.cjs
-                const fet = (...args) =>
-                    import('node-fetch').then(({ default: fetch }) =>
-                        fetch(...args)
-                    );
-                fetch = fet;
-                this.fetch = fetch;
-            }
-            return {
-                request: async options => {
-                    try {
-                        const { url, ...rest } = options;
-                        const response = await fetch(url, rest);
-                        const { status } = response;
-                        const contentType = rest.headers.contentType;
-                        const data =
-                            contentType === 'text/html'
-                                ? await response.text()
-                                : await response.json();
-                        log(
-                            `接口请求参数：${JSON.stringify(options)}\n
-                            接口响应结果：${JSON.stringify(data)}`
-                        );
-                        if (status !== 200) {
-                            return Promise.reject(data);
-                        }
-                        return Promise.resolve(data);
-                    } catch (error) {
-                        log(
-                            `接口响应错误：\n${error}\n${JSON.stringify(error)}`
-                        );
-                        return Promise.reject(error);
-                    }
-                },
-                notify: options => {
-                    options.filter(item => !!item);
-                    log(`${title}\n${options.join('\n')}`);
-                },
-                store: {
-                    get: key => {
-                        let value = localStorage.getItem(key);
-                        try {
-                            value = JSON.parse(value);
-                        } catch (error) {}
-                        return value;
-                    },
-                    set: (key, value) => {
-                        if (typeof value === 'object') {
-                            value = JSON.stringify(value);
-                        }
-                        localStorage.setItem(key, value);
-                    }
-                },
-                done: () => {
-                    log('Node done');
-                }
-            };
+            localStorage.setItem(key, value);
         }
-        _quanx() {
-            let { log, title } = this;
-            return {
-                request: async options => {
-                    try {
-                        const response = await $task.fetch(options);
-                        const { statusCode, body } = response;
-                        log(
-                            `接口请求参数：${JSON.stringify(options)}\n
-                            接口响应结果：${JSON.stringify(response)}`
-                        );
-                        if (statusCode !== 200) {
-                            return Promise.reject(response);
-                        }
-                        return Promise.resolve(body);
-                    } catch (error) {
-                        log(
-                            `接口响应错误：\n${error}\n${JSON.stringify(error)}`
-                        );
-                        return Promise.reject(error);
-                    }
-                },
-                notify: options => {
-                    switch (options.length) {
-                        case 1:
-                            $notify(title, options[0]);
-                            break;
-                        case 2:
-                            $notify(title, options[0], options[1]);
-                            break;
-                        default:
-                            break;
-                    }
-                },
-                store: {
-                    get: key => {
-                        let value = $prefs.valueForKey(key);
-                        try {
-                            value = JSON.parse(value);
-                        } catch (error) {}
-                        return value;
-                    },
-                    set: (key, value) => {
-                        if (typeof value === 'object') {
-                            value = JSON.stringify(value);
-                        }
-                        $prefs.setValueForKey(value, key);
-                    }
-                },
-                done: () => {
-                    log('Quanx done');
-                    $done();
-                }
-            };
-        }
-    })(title);
+    };
+    this.log(`脚本应用：${this.title}\n脚本环境：${ENV}`);
 }
