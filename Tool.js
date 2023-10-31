@@ -40,9 +40,8 @@ function Tool(title = '📣📣📣') {
         $.log(`${key}：${value}`);
         try {
             value = JSON.parse(value);
-        } catch (error) {
-            return value;
-        }
+        } catch (error) {}
+        return value;
     };
     const nodeInit = () => {
         let { localStorage, fetch } = this;
