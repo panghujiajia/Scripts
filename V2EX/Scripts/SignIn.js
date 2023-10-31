@@ -2,9 +2,9 @@ const $ = new Tool('V2EX');
 
 const V2EX_COOKIE = $.getStore('V2EX_COOKIE');
 
-const method = 'GET';
-const baseUrl = 'https://www.v2ex.com/mission/daily';
-const headers = {
+let method = 'GET';
+let baseUrl = 'https://www.v2ex.com/mission/daily';
+let headers = {
     'Accept-Encoding': `gzip, deflate, br`,
     Cookie: V2EX_COOKIE,
     Connection: `keep-alive`,

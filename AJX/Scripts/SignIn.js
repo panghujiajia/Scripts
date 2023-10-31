@@ -3,9 +3,9 @@ const $ = new Tool('安吉星');
 const AJX_COOKIE = $.getStore('AJX_COOKIE');
 const AJX_TOKEN = $.getStore('AJX_TOKEN');
 
-const method = 'POST';
-const baseUrl = 'https://www.onstar.com.cn/mssos/sos/credit/v1/';
-const headers = {
+let method = 'POST';
+let baseUrl = 'https://www.onstar.com.cn/mssos/sos/credit/v1/';
+let headers = {
     Connection: `keep-alive`,
     'Accept-Encoding': `gzip, deflate, br`,
     'Content-Type': `application/json`,

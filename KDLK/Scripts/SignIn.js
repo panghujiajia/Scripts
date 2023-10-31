@@ -2,9 +2,9 @@ const $ = new Tool('凯迪拉克');
 
 const KDLK_STORE_COOKIE = $.getStore('KDLK_STORE_COOKIE');
 
-const method = 'POST';
-const baseUrl = 'https://cadillac-club.mysgm.com.cn/touch/control';
-const headers = {
+let method = 'POST';
+let baseUrl = 'https://cadillac-club.mysgm.com.cn/touch/control';
+let headers = {
     accept: '*/*',
     'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     'sec-fetch-dest': 'empty',
