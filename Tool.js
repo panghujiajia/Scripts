@@ -37,8 +37,9 @@ function Tool(title = '📣📣📣') {
         return response;
     };
     const formatStore = value => {
+        $.log(value);
         try {
-            return JSON.parse(value);
+            value = JSON.parse(value);
         } catch (error) {
             return value;
         }
@@ -147,8 +148,8 @@ function Tool(title = '📣📣📣') {
     };
     // 取缓存
     this.getStore = key => {
-        if (isQuanX) formatStore($prefs.valueForKey(key));
-        if (isSurge) formatStore($persistentStore.read(key));
+        if (isQuanX) return formatStore($prefs.valueForKey(key));
+        if (isSurge) return formatStore($persistentStore.read(key));
         if (isNode) {
             const { localStorage, fetch } = nodeInit();
             let value = localStorage.getItem(key);
