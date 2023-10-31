@@ -6290,11 +6290,11 @@ const WPH_URL = $.getStore('WPH_URL');
 const WPH_BODY = $.getStore('WPH_BODY');
 const WPH_HEADERS = $.getStore('WPH_HEADERS');
 
+let method = 'POST';
+
 if (!WPH_URL || !WPH_BODY || !WPH_HEADERS) {
     $.notify(`Cookie读取失败！`, `请先打开重写，进入唯品会获取Cookie`);
 } else {
-    const method = 'POST';
-
     getSignin();
 
     // 签到方法

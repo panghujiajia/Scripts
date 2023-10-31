@@ -22,7 +22,6 @@ if (
     async function refreshAppToken() {
         try {
             const url = `https://app.sgmlink.com:443/service/mycadillacv3/rest/api/public/auth/v3/refreshToken`;
-            const method = `POST`;
             const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEARDERS;
 
             const headers = {
@@ -47,7 +46,7 @@ if (
             };
             const myRequest = {
                 url: url,
-                method: method,
+                method: 'POST',
                 headers: headers,
                 body: JSON.stringify(body)
             };
@@ -70,7 +69,6 @@ if (
     async function refreshStoreCookie() {
         try {
             const url = `https://cadillac-club.mysgm.com.cn/touch/control/checkUserLogin`;
-            const method = `POST`;
             const headers = {
                 accept: '*/*',
                 'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
@@ -87,7 +85,7 @@ if (
             const body = {};
             const myRequest = {
                 url: url,
-                method: method,
+                method: 'POST',
                 headers: headers,
                 body: JSON.stringify(body)
             };

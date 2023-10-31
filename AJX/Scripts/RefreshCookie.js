@@ -14,7 +14,6 @@ if (!AJX_COOKIE || !AJX_TOKEN) {
     async function refreshAppCookie() {
         try {
             const url = `https://www.onstar.com.cn/mssos/sos/credit/v1/getUserSignInit`;
-            const method = `GET`;
             const headers = {
                 Connection: `keep-alive`,
                 'Accept-Encoding': `gzip, deflate, br`,
@@ -31,7 +30,7 @@ if (!AJX_COOKIE || !AJX_TOKEN) {
             const body = ``;
             const myRequest = {
                 url: url,
-                method: method,
+                method: 'GET',
                 headers: headers,
                 body: JSON.stringify(body)
             };
@@ -48,7 +47,6 @@ if (!AJX_COOKIE || !AJX_TOKEN) {
     async function refreshAppToken() {
         try {
             const url = `https://api.shanghaionstar.com/sos/mobileuser/v1/public/greetings/OWNER`;
-            const method = `GET`;
             const headers = {
                 'client-info': `IPHONE_LARGE_16.1_100100_zh-CN_iPhone14,3_w9tZVO22q9XO8uHzOgqKyQ==`,
                 accept: `application/json`,
@@ -66,7 +64,7 @@ if (!AJX_COOKIE || !AJX_TOKEN) {
             const body = ``;
             const myRequest = {
                 url: url,
-                method: method,
+                method: 'GET',
                 headers: headers,
                 body: JSON.stringify(body)
             };

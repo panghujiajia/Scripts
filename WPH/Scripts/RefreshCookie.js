@@ -6311,7 +6311,6 @@ if (
 
     async function refreshAppToken(success) {
         try {
-            const method = `POST`;
             const params = WPH_BODY;
             const Authorization = sign.getSign(
                 WPH_URL.split('?')[0],
@@ -6324,7 +6323,7 @@ if (
             }
             const myRequest = {
                 url: WPH_URL,
-                method: method,
+                method: 'POST',
                 headers: { ...WPH_HEADERS, Authorization },
                 body
             };

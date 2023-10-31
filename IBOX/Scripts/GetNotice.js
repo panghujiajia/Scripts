@@ -7,7 +7,6 @@ getNotice();
 async function getNotice() {
     try {
         const url = `https://notice.ibox.art/html/notice/notice.html`;
-        const method = `GET`;
         const headers = {
             'Sec-Fetch-Dest': `document`,
             contentType: 'text/html',
@@ -28,7 +27,7 @@ async function getNotice() {
 
         const myRequest = {
             url: url,
-            method: method,
+            method: 'GET',
             headers: headers
         };
         const res = await $.request(myRequest);
