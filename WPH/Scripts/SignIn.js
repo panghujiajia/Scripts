@@ -6326,7 +6326,9 @@ async function getSignin() {
         };
         const res = await $.request(myRequest);
         const { code } = JSON.parse(res);
-        await getSigninInfo(code === 1);
+        if (code === 1) {
+            await getSigninInfo(true);
+        }
         $.done();
     } catch (error) {
         $.log(`Error：\n${error}\n${JSON.stringify(error)}`);
