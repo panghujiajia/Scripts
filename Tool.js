@@ -36,6 +36,13 @@ function Tool(title = '📣📣📣') {
         }
         return response;
     };
+    const formatStore = value => {
+        try {
+            return JSON.parse(value);
+        } catch (error) {
+            return value;
+        }
+    };
     const nodeInit = () => {
         let { localStorage, fetch } = this;
         if (!localStorage) {
@@ -79,28 +86,19 @@ function Tool(title = '📣📣📣') {
         if (isSurge) {
             return new Promise((resolve, reject) => {
                 const { method } = options;
-                const httpEnum = {
-                    POST: (options, callback) => {
-                        $httpClient.post(options, (error, response, body) => {
-                            callback(error, adapterStatus(response), body);
-                        });
-                    },
-                    GET: (options, callback) => {
-                        $httpClient.get(options, (error, response, body) => {
-                            callback(error, adapterStatus(response), body);
-                        });
+                $httpClient[method.toLowerCase()](
+                    options,
+                    (error, response, body) => {
+                        if (error) {
+                            return reject(error);
+                        }
+                        const { status } = adapterStatus(response);
+                        if (status !== 200) {
+                            return reject(response);
+                        }
+                        return resolve(body);
                     }
-                };
-                httpEnum[method](options, (error, response, body) => {
-                    if (error) {
-                        return reject(error);
-                    }
-                    const { status } = response;
-                    if (status !== 200) {
-                        return reject(response);
-                    }
-                    return resolve(body);
-                });
+                );
             });
         }
         if (isNode) {
@@ -149,26 +147,23 @@ function Tool(title = '📣📣📣') {
     };
     // 取缓存
     this.getStore = key => {
-        if (isQuanX) return $prefs.valueForKey(key);
-        if (isSurge) return $persistentStore.read(key);
+        if (isQuanX) formatStore($prefs.valueForKey(key));
+        if (isSurge) formatStore($persistentStore.read(key));
         if (isNode) {
             const { localStorage, fetch } = nodeInit();
             let value = localStorage.getItem(key);
-            try {
-                value = JSON.parse(value);
-            } catch (error) {}
-            return value;
+            return formatStore(value);
         }
     };
     // 存缓存
     this.setStore = (key, value) => {
+        if (typeof value === 'object') {
+            value = JSON.stringify(value);
+        }
         if (isQuanX) $prefs.setValueForKey(value, key);
         if (isSurge) $persistentStore.write(value, key);
         if (isNode) {
             const { localStorage, fetch } = nodeInit();
-            if (typeof value === 'object') {
-                value = JSON.stringify(value);
-            }
             localStorage.setItem(key, value);
         }
     };
