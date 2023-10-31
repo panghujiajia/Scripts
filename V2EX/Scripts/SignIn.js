@@ -2,23 +2,23 @@ const $ = new Tool('V2EX');
 
 const V2EX_COOKIE = $.getStore('V2EX_COOKIE');
 
+const method = 'GET';
+const baseUrl = 'https://www.v2ex.com/mission/daily';
+const headers = {
+    'Accept-Encoding': `gzip, deflate, br`,
+    Cookie: V2EX_COOKIE,
+    Connection: `keep-alive`,
+    Accept: `text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8`,
+    Host: `www.v2ex.com`,
+    'Accept-Language': `zh-CN,zh-Hans;q=0.9`,
+    Referer: 'https://www.v2ex.com/mission/daily',
+    'User-Agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
+};
+
 if (!V2EX_COOKIE) {
     $.notify(`Cookie读取失败！`, `请先打开重写，进入V2EX获取Cookie`);
 } else {
-    const method = 'GET';
-    const baseUrl = 'https://www.v2ex.com/mission/daily';
-    const headers = {
-        'Accept-Encoding': `gzip, deflate, br`,
-        Cookie: V2EX_COOKIE,
-        Connection: `keep-alive`,
-        Accept: `text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8`,
-        Host: `www.v2ex.com`,
-        'Accept-Language': `zh-CN,zh-Hans;q=0.9`,
-        Referer: 'https://www.v2ex.com/mission/daily',
-        'User-Agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
-    };
-
     getSigninInfo();
 
     // 签到方法

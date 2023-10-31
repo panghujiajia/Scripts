@@ -2,23 +2,23 @@ const $ = new Tool('凯迪拉克');
 
 const KDLK_STORE_COOKIE = $.getStore('KDLK_STORE_COOKIE');
 
+const method = 'POST';
+const baseUrl = 'https://cadillac-club.mysgm.com.cn/touch/control';
+const headers = {
+    accept: '*/*',
+    'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'x-requested-with': 'XMLHttpRequest',
+    Cookie: KDLK_STORE_COOKIE,
+    Referer: 'https://cadillac-club.mysgm.com.cn/touch/control/signin',
+    'Referrer-Policy': 'strict-origin-when-cross-origin'
+};
+
 if (!KDLK_STORE_COOKIE) {
     $.notify(`Cookie读取失败！`, `请先打开重写，进入APP-商城页面获取Cookie`);
 } else {
-    const method = 'POST';
-    const baseUrl = 'https://cadillac-club.mysgm.com.cn/touch/control';
-    const headers = {
-        accept: '*/*',
-        'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-origin',
-        'x-requested-with': 'XMLHttpRequest',
-        Cookie: KDLK_STORE_COOKIE,
-        Referer: 'https://cadillac-club.mysgm.com.cn/touch/control/signin',
-        'Referrer-Policy': 'strict-origin-when-cross-origin'
-    };
-
     getSigninInfo();
 
     // 签到方法

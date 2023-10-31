@@ -4,6 +4,33 @@ const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
 const KDLK_APP_HEARDERS = $.getStore('KDLK_APP_HEARDERS');
 const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 
+const method = 'POST';
+const baseUrl = 'https://app.sgmlink.com:443/service/mycadillacv3/rest/api';
+const headers = {
+    'Accept-Encoding': `gzip, deflate, br`,
+    Host: `app.sgmlink.com:443`,
+    idpUserId,
+    deviceId,
+    'X-Tingyun-Id': `4Nl_NnGbjwY;c=2;r=1662739668;u=35e02d1754b727796a15156a1ad53435::BD4E4C616020FB61`,
+    app_version: `6.2.0`,
+    mobile_model: `iPhone14,3`,
+    Connection: `keep-alive`,
+    mobile_brand: `ios`,
+    uuId: deviceId,
+    'User-Agent': `MyCadillac_Mycadillac_IOS_V.6.2.0__release/6.2.0 (iPhone; iOS 16.0.3; Scale/3.00)`,
+    tag: `ios`,
+    'Accept-Language': `zh-Hans-CN;q=1`,
+    'Content-Type': `application/json; charset=utf-8`,
+    'X-Tingyun': `c=A|HYFIoSexPMs`,
+    mobile_OS: `16.0.3`,
+    Accept: `*/*`,
+    buId: idpUserId,
+    appId: `MyCadillac`,
+    client_id,
+    Cookie: KDLK_APP_COOKIE,
+    access_token: KDLK_APP_ACCESS_TOKEN
+};
+
 if (!KDLK_APP_COOKIE || !KDLK_APP_HEARDERS || !KDLK_APP_ACCESS_TOKEN) {
     $.notify(
         `Cookie读取失败！`,
@@ -11,34 +38,6 @@ if (!KDLK_APP_COOKIE || !KDLK_APP_HEARDERS || !KDLK_APP_ACCESS_TOKEN) {
     );
 } else {
     const { idpUserId, deviceId, client_id } = KDLK_APP_HEARDERS;
-
-    const method = 'POST';
-    const baseUrl = 'https://app.sgmlink.com:443/service/mycadillacv3/rest/api';
-    const headers = {
-        'Accept-Encoding': `gzip, deflate, br`,
-        Host: `app.sgmlink.com:443`,
-        idpUserId,
-        deviceId,
-        'X-Tingyun-Id': `4Nl_NnGbjwY;c=2;r=1662739668;u=35e02d1754b727796a15156a1ad53435::BD4E4C616020FB61`,
-        app_version: `6.2.0`,
-        mobile_model: `iPhone14,3`,
-        Connection: `keep-alive`,
-        mobile_brand: `ios`,
-        uuId: deviceId,
-        'User-Agent': `MyCadillac_Mycadillac_IOS_V.6.2.0__release/6.2.0 (iPhone; iOS 16.0.3; Scale/3.00)`,
-        tag: `ios`,
-        'Accept-Language': `zh-Hans-CN;q=1`,
-        'Content-Type': `application/json; charset=utf-8`,
-        'X-Tingyun': `c=A|HYFIoSexPMs`,
-        mobile_OS: `16.0.3`,
-        Accept: `*/*`,
-        buId: idpUserId,
-        appId: `MyCadillac`,
-        client_id,
-        Cookie: KDLK_APP_COOKIE,
-        access_token: KDLK_APP_ACCESS_TOKEN
-    };
-
     getTask();
 
     async function getTask() {

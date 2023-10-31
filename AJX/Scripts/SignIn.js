@@ -3,28 +3,28 @@ const $ = new Tool('安吉星');
 const AJX_COOKIE = $.getStore('AJX_COOKIE');
 const AJX_TOKEN = $.getStore('AJX_TOKEN');
 
+const method = 'POST';
+const baseUrl = 'https://www.onstar.com.cn/mssos/sos/credit/v1/';
+const headers = {
+    Connection: `keep-alive`,
+    'Accept-Encoding': `gzip, deflate, br`,
+    'Content-Type': `application/json`,
+    Origin: `https://www.onstar.com.cn`,
+    'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 16_0_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`,
+    Authorization: AJX_TOKEN,
+    Cookie: AJX_COOKIE,
+    Host: `www.onstar.com.cn`,
+    Referer: `https://www.onstar.com.cn/mweb/ma80/sharedProjects/index.html`,
+    'Accept-Language': `zh-CN,zh-Hans;q=0.9`,
+    Accept: `*/*`
+};
+
 if (!AJX_COOKIE || !AJX_TOKEN) {
     $.notify(
         `Cookie读取失败！`,
         `请先打开重写，进入APP-我的-今日签到获取Cookie`
     );
 } else {
-    const method = 'POST';
-    const baseUrl = 'https://www.onstar.com.cn/mssos/sos/credit/v1/';
-    const headers = {
-        Connection: `keep-alive`,
-        'Accept-Encoding': `gzip, deflate, br`,
-        'Content-Type': `application/json`,
-        Origin: `https://www.onstar.com.cn`,
-        'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 16_0_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`,
-        Authorization: AJX_TOKEN,
-        Cookie: AJX_COOKIE,
-        Host: `www.onstar.com.cn`,
-        Referer: `https://www.onstar.com.cn/mweb/ma80/sharedProjects/index.html`,
-        'Accept-Language': `zh-CN,zh-Hans;q=0.9`,
-        Accept: `*/*`
-    };
-
     getSigninInfo();
 
     // 签到方法
