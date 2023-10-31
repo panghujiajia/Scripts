@@ -38,6 +38,14 @@ if (!KDLK_APP_COOKIE || !KDLK_APP_HEARDERS || !KDLK_APP_ACCESS_TOKEN) {
     );
 } else {
     const { idpUserId, deviceId, client_id } = KDLK_APP_HEARDERS;
+    headers = {
+        ...headers,
+        idpUserId,
+        deviceId,
+        client_id,
+        buId: idpUserId,
+        uuId: deviceId
+    };
     getTask();
 
     async function getTask() {
