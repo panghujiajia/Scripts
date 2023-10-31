@@ -1,0 +1,11 @@
+#!name=V2EX
+#!desc=V2EX签到
+
+[MITM]
+hostname= %APPEND% *.v2ex.com
+
+[Script]
+V2EX签到 = type=cron,cronexp=0 9 * * *,script-path=https://raw.githubusercontent.com/panghujiajia/Scripts/master/V2EX/Scripts/SignIn.js,debug=1
+
+V2EX获取Cookie = type=http-request,pattern=^https:\/\/www\.v2ex\.com\/mission\/daily,requires-body=1,max-size=0,debug=1,script-path=https://raw.githubusercontent.com/panghujiajia/Scripts/master/V2EX/Scripts/GetCookie.js
+

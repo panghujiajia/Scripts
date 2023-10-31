@@ -2,12 +2,12 @@
     "name": "京东",
     "task": [
         {
-            "config": "1 0 * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/JD/Scripts/SignIn.js, tag=京东签到, enabled=true",
-            "addons": "https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/JD/Rewrite.conf, tag=京东获取COOKIE, enabled=true"
+            "config": "1 0 * * * https://raw.githubusercontent.com/panghujiajia/Scripts/master/JD/Scripts/SignIn.js, tag=京东签到, enabled=true",
+            "addons": "https://raw.githubusercontent.com/panghujiajia/Scripts/master/JD/Rewrite.conf, tag=京东获取COOKIE, enabled=true"
         },
         {
-            "config": "10/20 * * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/JD/Scripts/RefreshCookie.js, tag=京东刷新COOKIE, enabled=true",
-            "addons": "https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/JD/Rewrite.conf, tag=京东获取COOKIE, enabled=true"
+            "config": "10/20 * * * * https://raw.githubusercontent.com/panghujiajia/Scripts/master/JD/Scripts/RefreshCookie.js, tag=京东刷新COOKIE, enabled=true",
+            "addons": "https://raw.githubusercontent.com/panghujiajia/Scripts/master/JD/Rewrite.conf, tag=京东获取COOKIE, enabled=true"
         }
     ],
     "description": "京东签到"

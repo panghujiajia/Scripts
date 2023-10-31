@@ -2,8 +2,8 @@
     "name": "V2EX",
     "task": [
         {
-            "config": "0 9 * * * https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/V2EX/Scripts/SignIn.js, tag=V2EX签到, enabled=true",
-            "addons": "https://raw.githubusercontent.com/panghujiajia/QuantumultX/master/V2EX/Rewrite.conf, tag=V2EX获取COOKIE, enabled=true"
+            "config": "0 9 * * * https://raw.githubusercontent.com/panghujiajia/Scripts/master/V2EX/Scripts/SignIn.js, tag=V2EX签到, enabled=true",
+            "addons": "https://raw.githubusercontent.com/panghujiajia/Scripts/master/V2EX/Rewrite.conf, tag=V2EX获取COOKIE, enabled=true"
         }
     ],
     "description": "V2EX签到"

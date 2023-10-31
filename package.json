@@ -1,5 +1,5 @@
 {
-    "name": "quantumultx",
+    "name": "Scripts",
     "version": "1.0.0",
     "description": "自写自用圈X脚本",
     "main": "PanghuJiajia.js",
@@ -8,14 +8,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/panghujiajia/QuantumultX.git"
+        "url": "git+https://github.com/panghujiajia/Scripts.git"
     },
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/panghujiajia/QuantumultX/issues"
+        "url": "https://github.com/panghujiajia/Scripts/issues"
     },
-    "homepage": "https://github.com/panghujiajia/QuantumultX#readme",
+    "homepage": "https://github.com/panghujiajia/Scripts#readme",
     "devDependencies": {
         "prettier": "^2.7.1"
     },
