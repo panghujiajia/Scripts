@@ -123,9 +123,9 @@ function Tool(title = '📣📣📣') {
         }
     };
     // 结束
-    this.done = res => {
-        if (isQuanX || isSurge) $done({ res });
-        if (isNode) this.log({ res });
+    this.done = (value = {}) => {
+        if (isQuanX || isSurge) $done(value);
+        if (isNode) this.log(value);
     };
     this.wait = time => {
         return new Promise(resolve => {
