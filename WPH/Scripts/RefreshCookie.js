@@ -6298,7 +6298,14 @@ const WPH_BODY_REFRESH = $.getStore('WPH_BODY_REFRESH');
 const WPH_HEADERS_REFRESH = $.getStore('WPH_HEADERS_REFRESH');
 
 !(async () => {
-    if (!WPH_URL || !WPH_BODY || !WPH_HEADERS) {
+    if (
+        !WPH_URL ||
+        !WPH_BODY ||
+        !WPH_HEADERS ||
+        !WPH_URL_REFRESH ||
+        !WPH_BODY_REFRESH ||
+        !WPH_HEADERS_REFRESH
+    ) {
         $.notify(`Cookie读取失败！`, `请先打开重写，进入唯品会获取Cookie`);
     } else {
         await refreshAppToken();
@@ -6328,7 +6335,7 @@ async function refreshAppToken(success) {
     const { code } = JSON.parse(res);
     if (code !== 1) {
         if (!success) {
-            // await refreshCookie();
+            await refreshCookie();
         } else {
             $.notify(`Cookie刷新失败！`, res);
         }

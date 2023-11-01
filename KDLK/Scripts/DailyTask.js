@@ -57,10 +57,9 @@ async function getTask() {
         body: JSON.stringify(reqBody)
     };
     const res = await $.request(myRequest);
-    const { data, resultCode } = JSON.parse(res);
-
-    const { taskGroups } = data;
+    const { data, resultCode, message } = JSON.parse(res);
     if (resultCode === '0000') {
+        const { taskGroups } = data;
         const task = taskGroups.find(item => item.taskGroup === 'DAY');
         if (task) {
             // FINISHED 完成任务但没领奖
@@ -77,6 +76,8 @@ async function getTask() {
                 }
             }
         }
+    } else if (resultCode === '401') {
+        $.notify(message, `请重新获取`);
     }
 }
 

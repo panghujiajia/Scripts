@@ -44,7 +44,17 @@ try {
         let WPH_URL = $.getStore('WPH_URL');
         let WPH_BODY = $.getStore('WPH_BODY');
         let WPH_HEADERS = $.getStore('WPH_HEADERS');
-        if (WPH_URL && WPH_BODY && WPH_HEADERS) {
+        let WPH_URL_REFRESH = $.getStore('WPH_URL_REFRESH');
+        let WPH_BODY_REFRESH = $.getStore('WPH_BODY_REFRESH');
+        let WPH_HEADERS_REFRESH = $.getStore('WPH_HEADERS_REFRESH');
+        if (
+            WPH_URL &&
+            WPH_BODY &&
+            WPH_HEADERS &&
+            WPH_URL_REFRESH &&
+            WPH_BODY_REFRESH &&
+            WPH_HEADERS_REFRESH
+        ) {
             $.notify(`Cookie写入成功！`);
         }
     }
