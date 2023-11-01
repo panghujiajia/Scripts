@@ -1,4 +1,4 @@
-# 自写 QuanX 脚本
+# 自用QuanX、Surge脚本
 
 ### [凯迪拉克](https://github.com/panghujiajia/Scripts/tree/master/KDLK)
 
