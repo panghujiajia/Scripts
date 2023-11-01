@@ -6330,8 +6330,8 @@ async function getSignin() {
     const { code, msg } = JSON.parse(res);
     if (code === 1) {
         await getSigninInfo(true);
-    } else if (code === -2) {
-        $.notify(msg, '请重新获取');
+    } else {
+        $.notify(msg);
     }
 }
 
