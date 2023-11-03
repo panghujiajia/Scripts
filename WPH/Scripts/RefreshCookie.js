@@ -6328,7 +6328,7 @@ async function refreshAppToken(success) {
     const { code } = JSON.parse(res);
     if (code !== 1) {
         if (!success) {
-            // await refreshCookie();
+            await refreshCookie();
         } else {
             $.notify(`Cookie刷新失败！`, res);
         }
