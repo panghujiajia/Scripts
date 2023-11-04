@@ -6347,17 +6347,17 @@ async function refreshCookie() {
     if (code !== 1) {
         $.notify(`Cookie刷新失败！`, res);
     } else {
-        const {
-            webToken: { tokenId }
-        } = data;
-        let Cookie = WPH_HEADERS.Cookie.replace(
-            /VIP_TANK=([A-Z]|[0-9]){40}/g,
-            `VIP_TANK=${tokenId}`
-        );
-        $.setStore('WPH_HEADERS', {
-            ...WPH_HEADERS,
-            Cookie
-        });
+        // const {
+        //     webToken: { tokenId }
+        // } = data;
+        // let Cookie = WPH_HEADERS.Cookie.replace(
+        //     /VIP_TANK=([A-Z]|[0-9]){40}/g,
+        //     `VIP_TANK=${tokenId}`
+        // );
+        // $.setStore('WPH_HEADERS', {
+        //     ...WPH_HEADERS,
+        //     Cookie
+        // });
     }
 }
 
