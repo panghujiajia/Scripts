@@ -37,35 +37,56 @@ async function getSignin() {
 }
 
 // 获取当月起止日期，格式为YYYY-MM-DD
-function getMonthDate() {
-    const date = new Date();
-    const y = date.getFullYear();
-    const m = date.getMonth() + 1;
-    const d = date.getDate();
-    const startDate = `${y}-${m}-01`;
-    const endDate = `${y}-${m}-${d}`;
-    return { startDate, endDate };
+function getCurrentMonthDates() {
+    // 获取当前日期
+    const currentDate = new Date();
+    // 获取当前月的第一天
+    const startOfMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        1
+    );
+    // 获取下个月的第一天，然后减去一天得到本月的最后一天
+    const endOfMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        0
+    );
+    // 格式化日期为YYYY-MM-DD
+    const formatDate = date => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+    const startDateStr = formatDate(startOfMonth);
+    const endDateStr = formatDate(endOfMonth);
+    return { startDate: startDateStr, endDate: endDateStr };
 }
 
 // 获取今日日期，格式为YYYY-MM-DD
 function getTodayDate() {
-    const date = new Date();
-    const y = date.getFullYear();
-    const m = date.getMonth() + 1;
-    const d = date.getDate();
-    return `${y}-${m}-${d}`;
+    // 获取当前日期
+    const currentDate = new Date();
+    // 格式化日期为YYYY-MM-DD
+    const formatDate = date => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+    return formatDate(currentDate);
 }
 
 // 获取签到信息
 async function getSigninInfo(success) {
-    const { startDate, endDate } = getMonthDate();
+    const { startDate, endDate } = getCurrentMonthDates();
     const url = `${baseUrl}/signInfo?startDate=${startDate}&endDate=${endDate}&isLoading=no`;
     const reqBody = {};
     const myRequest = {
         url,
-        method,
-        headers,
-        body: JSON.stringify(reqBody)
+        method: 'GET',
+        headers
     };
     const res = await $.request(myRequest);
     const {
