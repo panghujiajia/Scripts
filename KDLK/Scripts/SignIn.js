@@ -1,26 +1,14 @@
 const $ = new Tool('凯迪拉克');
 
-const KDLK_STORE_COOKIE = $.getStore('KDLK_STORE_COOKIE');
-
 let method = 'POST';
-let baseUrl = 'https://cadillac-club.mysgm.com.cn/touch/control';
-let headers = {
-    accept: '*/*',
-    'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-    'sec-fetch-dest': 'empty',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-site': 'same-origin',
-    'x-requested-with': 'XMLHttpRequest',
-    Cookie: KDLK_STORE_COOKIE,
-    Referer: 'https://cadillac-club.mysgm.com.cn/touch/control/signin',
-    'Referrer-Policy': 'strict-origin-when-cross-origin'
-};
+let baseUrl = 'https://cocm.mall.sgmsonline.com/api/bkm/sign';
+let headers = $.getStore('KDLK_STORE_HEADERS');
 
 !(async () => {
-    if (!KDLK_STORE_COOKIE) {
+    if (!headers) {
         $.notify(
             `Cookie读取失败！`,
-            `请先打开重写，进入APP-商城页面获取Cookie`
+            `请先打开重写，进入APP-商城每日签到页面获取Cookie`
         );
     } else {
         await getSigninInfo();
@@ -31,7 +19,7 @@ let headers = {
 
 // 签到方法
 async function getSignin() {
-    const url = `${baseUrl}/signinAsync`;
+    const url = `${baseUrl}`;
     const reqBody = {};
     const myRequest = {
         url,
@@ -40,17 +28,38 @@ async function getSignin() {
         body: JSON.stringify(reqBody)
     };
     const res = await $.request(myRequest);
-    const { code, msg } = JSON.parse(res);
-    if (code === '200') {
+    const { statusCode, data } = JSON.parse(res);
+    if (statusCode === 200 && data === '签到成功') {
         await getSigninInfo(true);
     } else {
-        $.notify(`❗️❗️❗️签到失败！`, `失败原因：${msg}`);
+        $.notify(`❗️❗️❗️签到失败！`, `失败原因：${data}`);
     }
+}
+
+// 获取当月起止日期，格式为YYYY-MM-DD
+function getMonthDate() {
+    const date = new Date();
+    const y = date.getFullYear();
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+    const startDate = `${y}-${m}-01`;
+    const endDate = `${y}-${m}-${d}`;
+    return { startDate, endDate };
+}
+
+// 获取今日日期，格式为YYYY-MM-DD
+function getTodayDate() {
+    const date = new Date();
+    const y = date.getFullYear();
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+    return `${y}-${m}-${d}`;
 }
 
 // 获取签到信息
 async function getSigninInfo(success) {
-    const url = `${baseUrl}/checkSigninShowIndex`;
+    const { startDate, endDate } = getMonthDate();
+    const url = `${baseUrl}/signInfo?startDate=${startDate}&endDate=${endDate}&isLoading=no`;
     const reqBody = {};
     const myRequest = {
         url,
@@ -60,30 +69,31 @@ async function getSigninInfo(success) {
     };
     const res = await $.request(myRequest);
     const {
-        signinData: { continuousDay, signCount, signDatePoint },
-        signin
+        data: { count, continuous, signPoints },
+        statusCode
     } = JSON.parse(res);
-    if (signin === 'Y') {
-        await getSignin();
-    } else {
-        const date = new Date();
-        const y = date.getFullYear();
-        const m = date.getMonth() + 1;
-        const d = date.getDate();
-        $.log(`${y}-${m}-${d}`);
-        let last = Object.values(signDatePoint).pop();
-
-        if (success) {
-            $.notify(
-                `🎉🎉🎉签到成功！`,
-                `本次签到获得${last}积分，累计签到${signCount}天，已连续签到${continuousDay}天`
-            );
+    if (statusCode === 200) {
+        const today = getTodayDate();
+        const signed = signPoints.findIndex(
+            item => item.signDate === today && item.checkFlag === '1'
+        );
+        if (signed === -1) {
+            await getSignin();
         } else {
-            $.notify(
-                `❗️❗️❗️今日已签到！`,
-                `累计签到${signCount}天，已连续签到${continuousDay}天`
-            );
+            if (success) {
+                $.notify(
+                    `🎉🎉🎉签到成功！`,
+                    `本次签到获得${signPoints[signed].signPoints}积分，累计签到${count}天，已连续签到${continuous}天`
+                );
+            } else {
+                $.notify(
+                    `❗️❗️❗️今日已签到！`,
+                    `累计签到${count}天，已连续签到${continuous}天`
+                );
+            }
         }
+    } else {
+        $.notify(`签到信息获取失败`);
     }
 }
 
