@@ -1,17 +1,16 @@
 const $ = new Tool('凯迪拉克');
 
-const KDLK_STORE_COOKIE = $.getStore('KDLK_STORE_COOKIE');
-
 const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
 const KDLK_APP_HEARDERS = $.getStore('KDLK_APP_HEARDERS');
 const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 const KDLK_APP_REFRESH_ACCESS_TOKEN = $.getStore(
     'KDLK_APP_REFRESH_ACCESS_TOKEN'
 );
+let headers = $.getStore('KDLK_STORE_HEADERS');
 
 !(async () => {
     if (
-        !KDLK_STORE_COOKIE ||
+        !headers ||
         !KDLK_APP_COOKIE ||
         !KDLK_APP_HEARDERS ||
         !KDLK_APP_ACCESS_TOKEN ||
@@ -68,31 +67,45 @@ async function refreshAppToken() {
     await refreshStoreCookie();
 }
 
-async function refreshStoreCookie() {
-    const url = `https://cadillac-club.mysgm.com.cn/touch/control/checkUserLogin`;
-    const headers = {
-        accept: '*/*',
-        'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-        'cache-control': 'no-cache',
-        pragma: 'no-cache',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-origin',
-        'x-requested-with': 'XMLHttpRequest',
-        Cookie: KDLK_STORE_COOKIE,
-        Referer: 'https://cadillac-club.mysgm.com.cn/touchs/index.html',
-        'Referrer-Policy': 'strict-origin-when-cross-origin'
+// 获取当月起止日期，格式为YYYY-MM-DD
+function getCurrentMonthDates() {
+    // 获取当前日期
+    const currentDate = new Date();
+    // 获取当前月的第一天
+    const startOfMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        1
+    );
+    // 获取下个月的第一天，然后减去一天得到本月的最后一天
+    const endOfMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        0
+    );
+    // 格式化日期为YYYY-MM-DD
+    const formatDate = date => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
-    const body = {};
+    const startDateStr = formatDate(startOfMonth);
+    const endDateStr = formatDate(endOfMonth);
+    return { startDate: startDateStr, endDate: endDateStr };
+}
+
+async function refreshStoreCookie() {
+    const { startDate, endDate } = getCurrentMonthDates();
+    const url = `https://cocm.mall.sgmsonline.com/api/bkm/sign/signInfo?startDate=${startDate}&endDate=${endDate}&isLoading=no`;
     const myRequest = {
-        url: url,
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(body)
+        url,
+        method: 'GET',
+        headers
     };
     const res = await $.request(myRequest);
-    const { IS_LOGIN } = JSON.parse(res);
-    if (!IS_LOGIN || IS_LOGIN !== 'Y') {
+    const { statusCode } = JSON.parse(res);
+    if (statusCode !== 200) {
         $.notify(`商城Cookie刷新失败！`, res);
     }
 }

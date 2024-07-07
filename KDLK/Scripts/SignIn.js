@@ -82,7 +82,6 @@ function getTodayDate() {
 async function getSigninInfo(success) {
     const { startDate, endDate } = getCurrentMonthDates();
     const url = `${baseUrl}/signInfo?startDate=${startDate}&endDate=${endDate}&isLoading=no`;
-    const reqBody = {};
     const myRequest = {
         url,
         method: 'GET',
