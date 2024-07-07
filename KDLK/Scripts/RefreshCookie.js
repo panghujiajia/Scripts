@@ -6,11 +6,11 @@ const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 const KDLK_APP_REFRESH_ACCESS_TOKEN = $.getStore(
     'KDLK_APP_REFRESH_ACCESS_TOKEN'
 );
-let headers = $.getStore('KDLK_STORE_HEADERS');
+let KDLK_STORE_HEADER = $.getStore('KDLK_STORE_HEADERS');
 
 !(async () => {
     if (
-        !headers ||
+        !KDLK_STORE_HEADER ||
         !KDLK_APP_COOKIE ||
         !KDLK_APP_HEARDERS ||
         !KDLK_APP_ACCESS_TOKEN ||
@@ -67,46 +67,53 @@ async function refreshAppToken() {
     await refreshStoreCookie();
 }
 
-// 获取当月起止日期，格式为YYYY-MM-DD
-function getCurrentMonthDates() {
-    // 获取当前日期
-    const currentDate = new Date();
-    // 获取当前月的第一天
-    const startOfMonth = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        1
-    );
-    // 获取下个月的第一天，然后减去一天得到本月的最后一天
-    const endOfMonth = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() + 1,
-        0
-    );
-    // 格式化日期为YYYY-MM-DD
-    const formatDate = date => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-    const startDateStr = formatDate(startOfMonth);
-    const endDateStr = formatDate(endOfMonth);
-    return { startDate: startDateStr, endDate: endDateStr };
-}
-
 async function refreshStoreCookie() {
-    const { startDate, endDate } = getCurrentMonthDates();
-    const url = `https://cocm.mall.sgmsonline.com/api/bkm/sign/signInfo?startDate=${startDate}&endDate=${endDate}&isLoading=no`;
+    const url = `https://cocm.mall.sgmsonline.com/api/bkm/auth/refreshToken`;
+    const { Cookie, Authorization, access_token } = KDLK_STORE_HEADER;
+    const headers = {
+        Host: 'cocm.mall.sgmsonline.com',
+        Cookie,
+        'User-Agent':
+            'mycadillac_app_new Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+        Referer: 'https://cocm.mall.sgmsonline.com/mycenter/pages/index/sign',
+        'channel-code': 'COCM',
+        Origin: 'https://cocm.mall.sgmsonline.com',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Site': 'same-origin',
+        'Content-Length': '18',
+        'X-Tingyun': KDLK_STORE_HEADER['X-Tingyun'],
+        Connection: 'keep-alive',
+        Authorization,
+        'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
+        client_id:
+            '19La8WErZHWGrSGT36cABf31N2v92yQ5tXHEkyOFU9qJo43byM3EUIsl349',
+        idpUserId: 'MYCDL013650309',
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        access_token,
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Sec-Fetch-Mode': 'cors'
+    };
+    const body = {
+        isLoading: 'no'
+    };
     const myRequest = {
-        url,
-        method: 'GET',
-        headers
+        url: url,
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
     };
     const res = await $.request(myRequest);
-    const { statusCode } = JSON.parse(res);
+    const {
+        statusCode,
+        data: { userAccessToken, accessToken }
+    } = JSON.parse(res);
     if (statusCode !== 200) {
         $.notify(`商城Cookie刷新失败！`, res);
+    } else {
+        KDLK_STORE_HEADER.access_token = userAccessToken;
+        KDLK_STORE_HEADER.Authorization = `Bearer ${accessToken}`;
+        $.setStore('KDLK_STORE_HEADER', KDLK_STORE_HEADER);
     }
 }
 
