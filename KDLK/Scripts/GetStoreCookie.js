@@ -2,14 +2,14 @@ const $ = new Tool('凯迪拉克');
 
 try {
     const { headers } = $request;
-    const { Cookie } = headers;
+    const { Cookie, access_token } = headers;
     $.log(headers);
-    if (!Cookie) {
+    if (!Cookie || !access_token) {
         $.log(`获取Cookie失败：${JSON.stringify(headers)}`);
         $.notify(`Cookie获取失败！`);
     } else {
-        $.setStore('KDLK_STORE_COOKIE', Cookie);
-        $.log(`Cookie：${Cookie}`);
+        $.setStore('KDLK_STORE_HEADERS', headers);
+        $.log(`headers：${headers}`);
         $.notify(`Cookie写入成功！`);
     }
 } catch (error) {

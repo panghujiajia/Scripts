@@ -1,17 +1,16 @@
 const $ = new Tool('凯迪拉克');
 
-const KDLK_STORE_COOKIE = $.getStore('KDLK_STORE_COOKIE');
-
 const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
 const KDLK_APP_HEARDERS = $.getStore('KDLK_APP_HEARDERS');
 const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 const KDLK_APP_REFRESH_ACCESS_TOKEN = $.getStore(
     'KDLK_APP_REFRESH_ACCESS_TOKEN'
 );
+let KDLK_STORE_HEADER = $.getStore('KDLK_STORE_HEADERS');
 
 !(async () => {
     if (
-        !KDLK_STORE_COOKIE ||
+        !KDLK_STORE_HEADER ||
         !KDLK_APP_COOKIE ||
         !KDLK_APP_HEARDERS ||
         !KDLK_APP_ACCESS_TOKEN ||
@@ -69,21 +68,35 @@ async function refreshAppToken() {
 }
 
 async function refreshStoreCookie() {
-    const url = `https://cadillac-club.mysgm.com.cn/touch/control/checkUserLogin`;
+    const url = `https://cocm.mall.sgmsonline.com/api/bkm/auth/refreshToken`;
+    const { Cookie, Authorization, access_token } = KDLK_STORE_HEADER;
     const headers = {
-        accept: '*/*',
-        'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-        'cache-control': 'no-cache',
-        pragma: 'no-cache',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-origin',
-        'x-requested-with': 'XMLHttpRequest',
-        Cookie: KDLK_STORE_COOKIE,
-        Referer: 'https://cadillac-club.mysgm.com.cn/touchs/index.html',
-        'Referrer-Policy': 'strict-origin-when-cross-origin'
+        Host: 'cocm.mall.sgmsonline.com',
+        Cookie,
+        'User-Agent':
+            'mycadillac_app_new Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+        Referer: 'https://cocm.mall.sgmsonline.com/mycenter/pages/index/sign',
+        'channel-code': 'COCM',
+        Origin: 'https://cocm.mall.sgmsonline.com',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Site': 'same-origin',
+        'Content-Length': '18',
+        'X-Tingyun': KDLK_STORE_HEADER['X-Tingyun'],
+        Connection: 'keep-alive',
+        Authorization,
+        'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
+        client_id:
+            '19La8WErZHWGrSGT36cABf31N2v92yQ5tXHEkyOFU9qJo43byM3EUIsl349',
+        idpUserId: 'MYCDL013650309',
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        access_token,
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Sec-Fetch-Mode': 'cors'
     };
-    const body = {};
+    const body = {
+        isLoading: 'no'
+    };
     const myRequest = {
         url: url,
         method: 'POST',
@@ -91,9 +104,16 @@ async function refreshStoreCookie() {
         body: JSON.stringify(body)
     };
     const res = await $.request(myRequest);
-    const { IS_LOGIN } = JSON.parse(res);
-    if (!IS_LOGIN || IS_LOGIN !== 'Y') {
+    const {
+        statusCode,
+        data: { userAccessToken, accessToken }
+    } = JSON.parse(res);
+    if (statusCode !== 200) {
         $.notify(`商城Cookie刷新失败！`, res);
+    } else {
+        KDLK_STORE_HEADER.access_token = userAccessToken;
+        KDLK_STORE_HEADER.Authorization = `Bearer ${accessToken}`;
+        $.setStore('KDLK_STORE_HEADER', KDLK_STORE_HEADER);
     }
 }
 
