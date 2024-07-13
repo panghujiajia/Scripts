@@ -88,26 +88,7 @@ function Tool(title = '📣📣📣') {
             }
         }
         if (isSurge) {
-            // return new Promise((resolve, reject) => {
-            //     this.log('url：', options.url);
-            //     this.log('headers：', options.headers);
-            //     this.log('body：', options.body);
-            //     const { method } = options;
-            //     $httpClient[method.toLowerCase()](
-            //         options,
-            //         (error, response, body) => {
-            //             if (error) {
-            //                 return reject(error);
-            //             }
-            //             const { status } = adapterStatus(response);
-            //             if (status !== 200) {
-            //                 return reject(response);
-            //             }
-            //             return resolve(body);
-            //         }
-            //     );
-            // })
-            try {
+            return new Promise((resolve, reject) => {
                 this.log(`url：\n\n${options.url}`);
                 this.log(`headers：\n\n${JSON.stringify(options.headers)}`);
                 this.log(`body：\n\n${options.body}`);
@@ -116,19 +97,21 @@ function Tool(title = '📣📣📣') {
                     options,
                     (error, response, body) => {
                         if (error) {
-                            return Promise.reject(error);
+                            this.log(
+                                `接口响应错误：\n${error}\n${JSON.stringify(
+                                    error
+                                )}`
+                            );
+                            return reject(error);
                         }
                         const { status } = adapterStatus(response);
                         if (status !== 200) {
-                            return Promise.reject(response);
+                            return reject(response);
                         }
-                        return Promise.resolve(body);
+                        return resolve(body);
                     }
                 );
-            } catch (error) {
-                this.log(`接口响应错误：\n${error}\n${JSON.stringify(error)}`);
-                return Promise.reject(error);
-            }
+            });
         }
         if (isNode) {
             try {
