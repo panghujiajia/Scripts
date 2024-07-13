@@ -77,13 +77,16 @@ function Tool(title = '📣📣📣') {
                 const response = await $task.fetch(options);
                 const { status, body } = adapterStatus(response);
                 if (status !== 200) {
+                    this.log(
+                        `响应错误：\n\n${body}\n\n${JSON.stringify(body)}`
+                    );
                     return Promise.reject(response);
                 }
                 this.log('status：', status);
                 this.log('body：', body);
                 return Promise.resolve(body);
             } catch (error) {
-                this.log(`接口响应错误：\n${error}\n${JSON.stringify(error)}`);
+                this.log(`网络错误：\n\n${error}\n\n${JSON.stringify(error)}`);
                 return Promise.reject(error);
             }
         }
@@ -98,7 +101,7 @@ function Tool(title = '📣📣📣') {
                     (error, response, body) => {
                         if (error) {
                             this.log(
-                                `接口响应错误：\n${error}\n${JSON.stringify(
+                                `网络错误：\n\n${error}\n\n${JSON.stringify(
                                     error
                                 )}`
                             );
@@ -106,6 +109,11 @@ function Tool(title = '📣📣📣') {
                         }
                         const { status } = adapterStatus(response);
                         if (status !== 200) {
+                            this.log(
+                                `响应错误：\n\n${body}\n\n${JSON.stringify(
+                                    body
+                                )}`
+                            );
                             return reject(response);
                         }
                         return resolve(body);
@@ -128,11 +136,14 @@ function Tool(title = '📣📣📣') {
                         ? await response.text()
                         : await response.json();
                 if (status !== 200) {
+                    this.log(
+                        `响应错误：\n\n${data}\n\n${JSON.stringify(data)}`
+                    );
                     return Promise.reject(data);
                 }
                 return Promise.resolve(data);
             } catch (error) {
-                this.log(`接口响应错误：\n${error}\n${JSON.stringify(error)}`);
+                this.log(`网络错误：\n\n${error}\n\n${JSON.stringify(error)}`);
                 return Promise.reject(error);
             }
         }
