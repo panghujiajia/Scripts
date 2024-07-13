@@ -6,11 +6,11 @@ const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 const KDLK_APP_REFRESH_ACCESS_TOKEN = $.getStore(
     'KDLK_APP_REFRESH_ACCESS_TOKEN'
 );
-let KDLK_STORE_HEADER = $.getStore('KDLK_STORE_HEADERS');
+let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
 
 !(async () => {
     if (
-        !KDLK_STORE_HEADER ||
+        !KDLK_STORE_HEADERS ||
         !KDLK_APP_COOKIE ||
         !KDLK_APP_HEARDERS ||
         !KDLK_APP_ACCESS_TOKEN ||
@@ -21,7 +21,7 @@ let KDLK_STORE_HEADER = $.getStore('KDLK_STORE_HEADERS');
         await refreshAppToken();
     }
 })()
-    .catch(error => $.log(`Error：\n${error}\n${JSON.stringify(error)}`))
+    .catch(error => $.log(`Error：\n\n${error}\n${JSON.stringify(error)}`))
     .finally(() => $.done());
 
 async function refreshAppToken() {
@@ -55,6 +55,10 @@ async function refreshAppToken() {
         body: JSON.stringify(body)
     };
     const res = await $.request(myRequest);
+    if (!res) {
+        $.notify(`AppCookie刷新失败！`, res);
+        return $.done();
+    }
     const {
         resultCode,
         data: { accessToken }
@@ -64,12 +68,50 @@ async function refreshAppToken() {
     } else {
         $.setStore('KDLK_APP_ACCESS_TOKEN', accessToken);
     }
-    await refreshStoreCookie();
+    await getExchangeTicket();
+}
+
+// 获取ticket
+async function getExchangeTicket() {
+    const url = `https://mycadillac.apps.sgmsonline.com/service/mycadillacv3/rest/api/private/vehicleMarket/getExchangeTicket`;
+    const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEARDERS;
+
+    const headers = {
+        'user-agent': 'Dart/2.19 (dart:io)',
+        appid: 'MyCadillac',
+        app_version: '7.5.2',
+        'accept-encoding': 'gzip',
+        uuid: 'C34D5C99-87CB-42B2-B26D-ABBACCD661DB',
+        mobile_os: 'IOS: 17.4',
+        'content-type': 'application/json; charset=utf-8',
+        tag: 'IOS',
+        buid: idpUserId,
+        mobile_model: 'iPhone15,3',
+        client_id,
+        access_token: KDLK_APP_ACCESS_TOKEN,
+        'content-length': '2',
+        host: 'mycadillac.apps.sgmsonline.com',
+        mobile_brand: 'iPhone',
+        idpuserid: idpUserId
+    };
+    const body = {};
+    const myRequest = {
+        url: url,
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+    };
+    const res = await $.request(myRequest);
+    console.log(res);
+    // const {
+    //     resultCode,
+    //     data: { accessToken }
+    // } = JSON.parse(res);
 }
 
 async function refreshStoreCookie() {
     const url = `https://cocm.mall.sgmsonline.com/api/bkm/auth/refreshToken`;
-    const { Cookie, Authorization, access_token } = KDLK_STORE_HEADER;
+    const { Cookie, Authorization, access_token } = KDLK_STORE_HEADERS;
     const headers = {
         Host: 'cocm.mall.sgmsonline.com',
         Cookie,
@@ -81,7 +123,7 @@ async function refreshStoreCookie() {
         'Sec-Fetch-Dest': 'empty',
         'Sec-Fetch-Site': 'same-origin',
         'Content-Length': '18',
-        'X-Tingyun': KDLK_STORE_HEADER['X-Tingyun'],
+        'X-Tingyun': KDLK_STORE_HEADERS['X-Tingyun'],
         Connection: 'keep-alive',
         Authorization,
         'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
@@ -111,11 +153,11 @@ async function refreshStoreCookie() {
     if (statusCode !== 200) {
         $.notify(`商城Cookie刷新失败！`, res);
     } else {
-        KDLK_STORE_HEADER.access_token = userAccessToken;
-        KDLK_STORE_HEADER.Authorization = `Bearer ${accessToken}`;
-        $.setStore('KDLK_STORE_HEADER', KDLK_STORE_HEADER);
+        KDLK_STORE_HEADERS.access_token = userAccessToken;
+        KDLK_STORE_HEADERS.Authorization = `Bearer ${accessToken}`;
+        $.setStore('KDLK_STORE_HEADERS', KDLK_STORE_HEADERS);
     }
 }
 
 // prettier-ignore
-function Tool(t="📣📣📣"){const e="undefined"!=typeof module&&!!module.exports&&"node",o="undefined"!=typeof $task&&"quanx",s="undefined"!=typeof $httpClient&&"surge",r=e||o||s;this.title=t;const i=t=>(t&&(t.status?t.statusCode=t.status:t.statusCode&&(t.status=t.statusCode)),t),n=(t,e)=>{$.log(`${t}：${e}`);try{e=JSON.parse(e)}catch(t){}return e},a=()=>{let{localStorage:t,fetch:e}=this;if(!t){let e=require("node-localstorage").LocalStorage;const o=new e("./store");t=o}if(!e){const t=(...t)=>import("node-fetch").then(({default:e})=>e(...t));e=t}return{localStorage:t,fetch:e}};this.log=(t=>{"object"==typeof t?console.log(`\n${JSON.stringify(t)}`):console.log(`\n${t}`)}),this.request=(async t=>{if(o)try{const e=await $task.fetch(t),{status:o,body:s}=i(e);return 200!==o?Promise.reject(e):Promise.resolve(s)}catch(t){return this.log(`接口响应错误：\n${t}\n${JSON.stringify(t)}`),Promise.reject(t)}if(s)return new Promise((e,o)=>{const{method:s}=t;$httpClient[s.toLowerCase()](t,(t,s,r)=>{if(t)return o(t);const{status:n}=i(s);return 200!==n?o(s):e(r)})});if(e){const{localStorage:e,fetch:o}=a();try{const{url:e,...s}=t,r=await o(e,s),{status:n}=i(r),a=s.headers.contentType,l="text/html"===a?await r.text():await r.json();return 200!==n?Promise.reject(l):Promise.resolve(l)}catch(t){return this.log(`接口响应错误：\n${t}\n${JSON.stringify(t)}`),Promise.reject(t)}}}),this.done=((t={})=>{(o||s)&&$done(t),e&&this.log(t)}),this.wait=(t=>new Promise(e=>{setTimeout(()=>{e(!0)},1e3*t||2e3)})),this.notify=((t="",r="")=>{o&&$notify(this.title,t,r),s&&$notification.post(this.title,t,r),e&&this.log(`${this.title}\n${t}\n${r}`)}),this.getStore=(t=>{if(o)return n(t,$prefs.valueForKey(t));if(s)return n(t,$persistentStore.read(t));if(e){const{localStorage:e,fetch:o}=a();let s=e.getItem(t);return n(t,s)}}),this.setStore=((t,r)=>{if("object"==typeof r&&(r=JSON.stringify(r)),o&&$prefs.setValueForKey(r,t),s&&$persistentStore.write(r,t),e){const{localStorage:e,fetch:o}=a();e.setItem(t,r)}}),this.log(`脚本应用：${this.title}\n脚本环境：${r}`)}
+function Tool(t="📣📣📣"){const e="undefined"!=typeof module&&!!module.exports&&"node",s="undefined"!=typeof $task&&"quanx",o="undefined"!=typeof $httpClient&&"surge",r=e||s||o;this.title=t;const i=t=>(t&&(t.status?t.statusCode=t.status:t.statusCode&&(t.status=t.statusCode)),t),n=(t,e)=>{try{e=JSON.parse(e)}catch(t){}return e},l=()=>{let{localStorage:t,fetch:e}=this;if(!t){let e=require("node-localstorage").LocalStorage;const s=new e("./store");t=s}if(!e){const t=(...t)=>import("node-fetch").then(({default:e})=>e(...t));e=t}return{localStorage:t,fetch:e}};this.log=(t=>{"object"==typeof t?console.log(`\n\n${JSON.stringify(t)}`):console.log(`\n\n${t}`)}),this.request=(async t=>{if(s)try{this.log(`url：\n\n${t.url}`),this.log(`headers：\n\n${JSON.stringify(t.headers)}`),this.log(`body：\n\n${t.body}`);const e=await $task.fetch(t),{status:s,body:o}=i(e);return 200!==s?Promise.reject(e):(this.log("status：",s),this.log("body：",o),Promise.resolve(o))}catch(t){return this.log(`接口响应错误：\n${t}\n${JSON.stringify(t)}`),Promise.reject(t)}if(o)try{this.log(`url：\n\n${t.url}`),this.log(`headers：\n\n${JSON.stringify(t.headers)}`),this.log(`body：\n\n${t.body}`);const{method:e}=t;$httpClient[e.toLowerCase()](t,(t,e,s)=>{if(t)return Promise.reject(t);const{status:o}=i(e);return 200!==o?Promise.reject(e):Promise.resolve(s)})}catch(t){return this.log(`接口响应错误：\n${t}\n${JSON.stringify(t)}`),Promise.reject(t)}if(e)try{const{localStorage:e,fetch:s}=l();this.log(`url：\n\n${t.url}`),this.log(`headers：\n\n${JSON.stringify(t.headers)}`),this.log(`body：\n\n${t.body}`);const{url:o,...r}=t,n=await s(o,r),{status:a}=i(n),h=r.headers.contentType,c="text/html"===h?await n.text():await n.json();return 200!==a?Promise.reject(c):Promise.resolve(c)}catch(t){return this.log(`接口响应错误：\n${t}\n${JSON.stringify(t)}`),Promise.reject(t)}}),this.done=((t={})=>{(s||o)&&$done(t),e&&this.log(t)}),this.wait=(t=>new Promise(e=>{setTimeout(()=>{e(!0)},1e3*t||2e3)})),this.notify=((t="",r="")=>{s&&$notify(this.title,t,r),o&&$notification.post(this.title,t,r),e&&this.log(`${this.title}\n${t}\n${r}`)}),this.getStore=(t=>{if(s)return n(t,$prefs.valueForKey(t));if(o)return n(t,$persistentStore.read(t));if(e){const{localStorage:e,fetch:s}=l();let o=e.getItem(t);return n(t,o)}}),this.setStore=((t,r)=>{if("object"==typeof r&&(r=JSON.stringify(r)),s&&$prefs.setValueForKey(r,t),o&&$persistentStore.write(r,t),e){const{localStorage:e,fetch:s}=l();e.setItem(t,r)}}),this.log(`脚本应用：${this.title}\n脚本环境：${r}`)}
