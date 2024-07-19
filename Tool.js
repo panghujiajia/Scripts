@@ -37,7 +37,6 @@ function Tool(title = '📣📣📣') {
         return response;
     };
     const formatStore = (key, value) => {
-        $.log(`${key}：${value}`);
         try {
             value = JSON.parse(value);
         } catch (error) {}
@@ -63,37 +62,58 @@ function Tool(title = '📣📣📣') {
     // 日志
     this.log = value => {
         if (typeof value === 'object') {
-            console.log(`\n${JSON.stringify(value)}`);
+            console.log(`\n\n${JSON.stringify(value)}`);
         } else {
-            console.log(`\n${value}`);
+            console.log(`\n\n${value}`);
         }
     };
     // 发起请求
     this.request = async options => {
         if (isQuanX) {
             try {
+                this.log(`url：\n\n${options.url}`);
+                this.log(`headers：\n\n${JSON.stringify(options.headers)}`);
+                this.log(`body：\n\n${options.body}`);
                 const response = await $task.fetch(options);
                 const { status, body } = adapterStatus(response);
                 if (status !== 200) {
+                    this.log(
+                        `响应错误：\n\n${body}\n\n${JSON.stringify(body)}`
+                    );
                     return Promise.reject(response);
                 }
+                this.log('status：', status);
+                this.log('body：', body);
                 return Promise.resolve(body);
             } catch (error) {
-                this.log(`接口响应错误：\n${error}\n${JSON.stringify(error)}`);
+                this.log(`网络错误：\n\n${error}\n\n${JSON.stringify(error)}`);
                 return Promise.reject(error);
             }
         }
         if (isSurge) {
             return new Promise((resolve, reject) => {
+                this.log(`url：\n\n${options.url}`);
+                this.log(`headers：\n\n${JSON.stringify(options.headers)}`);
+                this.log(`body：\n\n${options.body}`);
                 const { method } = options;
                 $httpClient[method.toLowerCase()](
                     options,
                     (error, response, body) => {
                         if (error) {
+                            this.log(
+                                `网络错误：\n\n${error}\n\n${JSON.stringify(
+                                    error
+                                )}`
+                            );
                             return reject(error);
                         }
                         const { status } = adapterStatus(response);
                         if (status !== 200) {
+                            this.log(
+                                `响应错误：\n\n${body}\n\n${JSON.stringify(
+                                    body
+                                )}`
+                            );
                             return reject(response);
                         }
                         return resolve(body);
@@ -102,8 +122,11 @@ function Tool(title = '📣📣📣') {
             });
         }
         if (isNode) {
-            const { localStorage, fetch } = nodeInit();
             try {
+                const { localStorage, fetch } = nodeInit();
+                this.log(`url：\n\n${options.url}`);
+                this.log(`headers：\n\n${JSON.stringify(options.headers)}`);
+                this.log(`body：\n\n${options.body}`);
                 const { url, ...rest } = options;
                 const response = await fetch(url, rest);
                 const { status } = adapterStatus(response);
@@ -113,11 +136,14 @@ function Tool(title = '📣📣📣') {
                         ? await response.text()
                         : await response.json();
                 if (status !== 200) {
+                    this.log(
+                        `响应错误：\n\n${data}\n\n${JSON.stringify(data)}`
+                    );
                     return Promise.reject(data);
                 }
                 return Promise.resolve(data);
             } catch (error) {
-                this.log(`接口响应错误：\n${error}\n${JSON.stringify(error)}`);
+                this.log(`网络错误：\n\n${error}\n\n${JSON.stringify(error)}`);
                 return Promise.reject(error);
             }
         }
