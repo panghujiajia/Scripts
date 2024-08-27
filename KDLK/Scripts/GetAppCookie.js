@@ -17,7 +17,8 @@ try {
     } else {
         const { accessToken } = data.auth;
         if (resHeaders && resHeaders['set-cookie']) {
-            $.setStore('KDLK_APP_COOKIE', resHeaders['set-cookie']);
+            const setCookie = resHeaders['set-cookie'];
+            $.setStore('KDLK_APP_COOKIE', setCookie.split(';')[0]);
         }
         if (accessToken || access_token) {
             $.setStore('KDLK_APP_ACCESS_TOKEN', accessToken || access_token);
