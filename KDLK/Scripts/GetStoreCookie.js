@@ -10,7 +10,7 @@ try {
     } else {
         $.setStore('KDLK_STORE_HEADERS', headers);
         $.log(`headers：${headers}`);
-        $.notify(`Cookie写入成功！`);
+        $.notify(`商城-Cookie写入成功！`);
     }
 } catch (error) {
     $.log(`Error：\n${error}\n${JSON.stringify(error)}`);

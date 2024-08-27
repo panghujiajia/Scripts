@@ -19,6 +19,7 @@ try {
         }
     }
     if (url.includes('signInfo')) {
+        $.notify(`signInfo捕获！！！`, Authorization);
         $.setStore('KDLK_APP_HEADERS', {
             ...$.getStore('KDLK_APP_HEADERS'),
             Authorization
