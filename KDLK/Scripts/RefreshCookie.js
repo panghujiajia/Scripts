@@ -3,9 +3,6 @@ const $ = new Tool('凯迪拉克');
 const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
 const KDLK_APP_HEADERS = $.getStore('KDLK_APP_HEADERS');
 const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
-const KDLK_APP_REFRESH_ACCESS_TOKEN = $.getStore(
-    'KDLK_APP_REFRESH_ACCESS_TOKEN'
-);
 let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
 
 !(async () => {
@@ -13,8 +10,7 @@ let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
         !KDLK_STORE_HEADERS ||
         !KDLK_APP_COOKIE ||
         !KDLK_APP_HEADERS ||
-        !KDLK_APP_ACCESS_TOKEN ||
-        !KDLK_APP_REFRESH_ACCESS_TOKEN
+        !KDLK_APP_ACCESS_TOKEN
     ) {
         $.notify(`Cookie读取失败！`, `请先打开重写，进入APP获取Cookie`);
     } else {
@@ -119,13 +115,12 @@ async function refreshAppTokenNew() {
     }
     const {
         statusCode,
-        data: { userAccessToken, accessToken }
+        data: { userAccessToken }
     } = JSON.parse(res || {});
     if (statusCode !== 200) {
         $.notify(`AppCookie刷新失败！`, res);
     } else {
         $.setStore('KDLK_APP_ACCESS_TOKEN', userAccessToken);
-        $.setStore('KDLK_APP_REFRESH_ACCESS_TOKEN', accessToken);
     }
     await getExchangeTicket();
 }

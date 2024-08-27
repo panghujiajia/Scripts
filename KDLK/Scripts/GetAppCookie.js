@@ -9,13 +9,13 @@ try {
         $.setStore('KDLK_APP_HEADERS', {
             ...headers
         });
+        if (access_token) {
+            $.setStore('KDLK_APP_ACCESS_TOKEN', access_token);
+        }
     } else {
-        const { accessToken, refreshToken } = data.auth;
+        const { accessToken } = data.auth;
         if (accessToken || access_token) {
             $.setStore('KDLK_APP_ACCESS_TOKEN', accessToken || access_token);
-        }
-        if (refreshToken) {
-            $.setStore('KDLK_APP_REFRESH_ACCESS_TOKEN', refreshToken);
         }
     }
     if (url.includes('getMemberInfo')) {
@@ -36,18 +36,8 @@ function notify() {
     const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
     const KDLK_APP_HEADERS = $.getStore('KDLK_APP_HEADERS');
     const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
-    const KDLK_APP_REFRESH_ACCESS_TOKEN = $.getStore(
-        'KDLK_APP_REFRESH_ACCESS_TOKEN'
-    );
-    $.log(
-        `Cookie：${KDLK_APP_COOKIE}\nAccessToken：${KDLK_APP_ACCESS_TOKEN}\nRefreshToken：${KDLK_APP_REFRESH_ACCESS_TOKEN}`
-    );
-    if (
-        KDLK_APP_COOKIE &&
-        KDLK_APP_HEADERS &&
-        KDLK_APP_ACCESS_TOKEN &&
-        KDLK_APP_REFRESH_ACCESS_TOKEN
-    ) {
+    $.log(`Cookie：${KDLK_APP_COOKIE}\nAccessToken：${KDLK_APP_ACCESS_TOKEN}`);
+    if (KDLK_APP_COOKIE && KDLK_APP_HEADERS && KDLK_APP_ACCESS_TOKEN) {
         $.notify(`Cookie写入成功！`);
     }
 }
