@@ -3,7 +3,7 @@ const $ = new Tool('凯迪拉克');
 try {
     const { url, headers } = $request;
     const { Cookie, access_token, Authorization } = headers;
-    const { body } = $response;
+    const { body, headers: resHeaders } = $response;
     const { data } = JSON.parse(body);
     if (url.includes('baseInfo')) {
         $.setStore('KDLK_APP_HEADERS', {
@@ -14,6 +14,9 @@ try {
         }
     } else {
         const { accessToken } = data.auth;
+        if (resHeaders && resHeaders['set-cookie']) {
+            $.setStore('KDLK_APP_COOKIE', resHeaders['set-cookie']);
+        }
         if (accessToken || access_token) {
             $.setStore('KDLK_APP_ACCESS_TOKEN', accessToken || access_token);
         }
