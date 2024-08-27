@@ -8,7 +8,6 @@ try {
         $.notify(`Cookie获取失败！`);
     } else {
         $.setStore('KDLK_STORE_HEADERS', headers);
-        $.log(`headers：${headers}`);
         $.notify(`商城-Cookie写入成功！`);
     }
 } catch (error) {
