@@ -38,7 +38,7 @@ function notify() {
     const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
     $.log(`Cookie：${KDLK_APP_COOKIE}\nAccessToken：${KDLK_APP_ACCESS_TOKEN}`);
     if (KDLK_APP_COOKIE && KDLK_APP_HEADERS && KDLK_APP_ACCESS_TOKEN) {
-        $.notify(`Cookie写入成功！`);
+        $.notify(`App-Cookie写入成功！`);
     }
 }
 $.done();
