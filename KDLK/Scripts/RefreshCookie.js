@@ -18,15 +18,63 @@ let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
     ) {
         $.notify(`Cookie读取失败！`, `请先打开重写，进入APP获取Cookie`);
     } else {
-        await refreshAppToken();
+        await refreshAppTokenNew();
     }
 })()
     .catch(error => $.log(`Error：\n\n${error}\n${JSON.stringify(error)}`))
     .finally(() => $.done());
 
-async function refreshAppToken() {
-    const url = `https://app.sgmlink.com:443/service/mycadillacv3/rest/api/public/auth/v3/refreshToken`;
-    const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEARDERS;
+// async function refreshAppToken() {
+//     const url = `https://app.sgmlink.com:443/service/mycadillacv3/rest/api/public/auth/v3/refreshToken`;
+//     const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEARDERS;
+//
+//     const headers = {
+//         Connection: `keep-alive`,
+//         'Accept-Encoding': `gzip, deflate, br`,
+//         app_version: `6.2.0`,
+//         'Content-Type': `application/json; charset=utf-8`,
+//         appId: `MyCadillac`,
+//         uuId: deviceId,
+//         deviceId,
+//         'X-Tingyun-Id': `4Nl_NnGbjwY;c=2;r=8936987;u=35e02d1754b727796a15156a1ad53435::BD4E4C616020FB61`,
+//         'User-Agent': `MyCadillac_Mycadillac_IOS_V.6.2.0__release/6.2.0 (iPhone; iOS 16.0.3; Scale/3.00)`,
+//         Cookie: KDLK_APP_COOKIE,
+//         Host: `app.sgmlink.com:443`,
+//         'Accept-Language': `zh-Hans-CN;q=1`,
+//         Accept: `*/*`,
+//         'X-Tingyun': `c=A|HYFIoSexPMs`
+//     };
+//     const body = {
+//         permToken: KDLK_APP_REFRESH_ACCESS_TOKEN,
+//         userName: idpUserId
+//     };
+//     const myRequest = {
+//         url: url,
+//         method: 'POST',
+//         headers: headers,
+//         body: JSON.stringify(body)
+//     };
+//     const res = await $.request(myRequest);
+//     if (!res) {
+//         $.notify(`AppCookie刷新失败！`, res);
+//         return $.done();
+//     }
+//     const {
+//         resultCode,
+//         data: { accessToken }
+//     } = JSON.parse(res);
+//     if (resultCode !== '0000') {
+//         $.notify(`AppCookie刷新失败！`, res);
+//     } else {
+//         $.setStore('KDLK_APP_ACCESS_TOKEN', accessToken);
+//     }
+//     await getExchangeTicket();
+// }
+
+// 新的刷新cookie方法
+async function refreshAppTokenNew() {
+    const url = `https://cocm.mall.sgmsonline.com/api/bkm/auth/refreshToken`;
+    const { idpUserId, deviceId, access_token } = KDLK_APP_HEARDERS;
 
     const headers = {
         Connection: `keep-alive`,
@@ -39,15 +87,14 @@ async function refreshAppToken() {
         'X-Tingyun-Id': `4Nl_NnGbjwY;c=2;r=8936987;u=35e02d1754b727796a15156a1ad53435::BD4E4C616020FB61`,
         'User-Agent': `MyCadillac_Mycadillac_IOS_V.6.2.0__release/6.2.0 (iPhone; iOS 16.0.3; Scale/3.00)`,
         Cookie: KDLK_APP_COOKIE,
-        Host: `app.sgmlink.com:443`,
+        Host: `cocm.mall.sgmsonline.com`,
         'Accept-Language': `zh-Hans-CN;q=1`,
         Accept: `*/*`,
-        'X-Tingyun': `c=A|HYFIoSexPMs`
+        'X-Tingyun': `c=A|HYFIoSexPMs`,
+        access_token,
+        Authorization: `Bearer ${KDLK_APP_REFRESH_ACCESS_TOKEN}`
     };
-    const body = {
-        permToken: KDLK_APP_REFRESH_ACCESS_TOKEN,
-        userName: idpUserId
-    };
+    const body = {};
     const myRequest = {
         url: url,
         method: 'POST',
@@ -60,13 +107,14 @@ async function refreshAppToken() {
         return $.done();
     }
     const {
-        resultCode,
-        data: { accessToken }
+        statusCode,
+        data: { userAccessToken, accessToken }
     } = JSON.parse(res);
-    if (resultCode !== '0000') {
+    if (statusCode !== 200) {
         $.notify(`AppCookie刷新失败！`, res);
     } else {
-        $.setStore('KDLK_APP_ACCESS_TOKEN', accessToken);
+        $.setStore('KDLK_APP_ACCESS_TOKEN', userAccessToken);
+        $.setStore('KDLK_APP_REFRESH_ACCESS_TOKEN', accessToken);
     }
     await getExchangeTicket();
 }
