@@ -18,7 +18,7 @@ try {
             $.setStore('KDLK_APP_ACCESS_TOKEN', accessToken || access_token);
         }
     }
-    if (url.includes('getMemberInfo')) {
+    if (url.includes('signInfo')) {
         $.setStore('KDLK_APP_HEADERS', {
             ...$.getStore('KDLK_APP_HEADERS'),
             Authorization
