@@ -5,6 +5,7 @@ try {
     const { Cookie, access_token, Authorization } = headers;
     const { body, headers: resHeaders } = $response;
     $.log($response);
+    // 111
     const { data } = JSON.parse(body);
     if (url.includes('baseInfo')) {
         $.setStore('KDLK_APP_HEADERS', {
