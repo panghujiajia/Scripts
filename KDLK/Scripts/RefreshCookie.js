@@ -1,7 +1,7 @@
 const $ = new Tool('凯迪拉克');
 
 const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
-const KDLK_APP_HEARDERS = $.getStore('KDLK_APP_HEARDERS');
+const KDLK_APP_HEADERS = $.getStore('KDLK_APP_HEADERS');
 const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 const KDLK_APP_REFRESH_ACCESS_TOKEN = $.getStore(
     'KDLK_APP_REFRESH_ACCESS_TOKEN'
@@ -12,7 +12,7 @@ let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
     if (
         !KDLK_STORE_HEADERS ||
         !KDLK_APP_COOKIE ||
-        !KDLK_APP_HEARDERS ||
+        !KDLK_APP_HEADERS ||
         !KDLK_APP_ACCESS_TOKEN ||
         !KDLK_APP_REFRESH_ACCESS_TOKEN
     ) {
@@ -26,7 +26,7 @@ let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
 
 // async function refreshAppToken() {
 //     const url = `https://app.sgmlink.com:443/service/mycadillacv3/rest/api/public/auth/v3/refreshToken`;
-//     const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEARDERS;
+//     const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEADERS;
 //
 //     const headers = {
 //         Connection: `keep-alive`,
@@ -74,27 +74,38 @@ let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
 // 新的刷新cookie方法
 async function refreshAppTokenNew() {
     const url = `https://cocm.mall.sgmsonline.com/api/bkm/auth/refreshToken`;
-    const { idpUserId, deviceId, access_token } = KDLK_APP_HEARDERS;
+    const { client_id, access_token, Authorization } = KDLK_APP_HEADERS;
 
     const headers = {
-        Connection: `keep-alive`,
-        'Accept-Encoding': `gzip, deflate, br`,
         app_version: `6.2.0`,
-        'Content-Type': `application/json; charset=utf-8`,
         appId: `MyCadillac`,
-        uuId: deviceId,
-        deviceId,
         'X-Tingyun-Id': `4Nl_NnGbjwY;c=2;r=8936987;u=35e02d1754b727796a15156a1ad53435::BD4E4C616020FB61`,
-        'User-Agent': `MyCadillac_Mycadillac_IOS_V.6.2.0__release/6.2.0 (iPhone; iOS 16.0.3; Scale/3.00)`,
         Cookie: KDLK_APP_COOKIE,
-        Host: `cocm.mall.sgmsonline.com`,
-        'Accept-Language': `zh-Hans-CN;q=1`,
-        Accept: `*/*`,
-        'X-Tingyun': `c=A|HYFIoSexPMs`,
         access_token,
-        Authorization: `Bearer ${KDLK_APP_REFRESH_ACCESS_TOKEN}`
+        Authorization,
+        Host: 'cocm.mall.sgmsonline.com',
+        'User-Agent':
+            'mycadillac_app_new Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+        Referer:
+            'https://cocm.mall.sgmsonline.com/?hideTitleBar=1&hideBar=1&idpUserId=MYCDL013650309&ticket=trnjAdMbPGEP',
+        'channel-code': 'COCM',
+        Origin: 'https://cocm.mall.sgmsonline.com',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Site': 'same-origin',
+        'Content-Length': '18',
+        'X-Tingyun': 'c=B|p35OnrDoP8k;x=7d10b3e6a9f94171',
+        Connection: 'keep-alive',
+        'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
+        client_id,
+        idpUserId: 'MYCDL013650309',
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Sec-Fetch-Mode': 'cors'
     };
-    const body = {};
+    const body = {
+        isLoading: 'no'
+    };
     const myRequest = {
         url: url,
         method: 'POST',
@@ -109,7 +120,7 @@ async function refreshAppTokenNew() {
     const {
         statusCode,
         data: { userAccessToken, accessToken }
-    } = JSON.parse(res);
+    } = JSON.parse(res || {});
     if (statusCode !== 200) {
         $.notify(`AppCookie刷新失败！`, res);
     } else {
@@ -122,7 +133,7 @@ async function refreshAppTokenNew() {
 // 获取ticket
 async function getExchangeTicket() {
     const url = `https://mycadillac.apps.sgmsonline.com/service/mycadillacv3/rest/api/private/vehicleMarket/getExchangeTicket`;
-    const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEARDERS;
+    const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEADERS;
     const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
     const headers = {
         'user-agent': 'Dart/2.19 (dart:io)',
@@ -164,7 +175,7 @@ async function getExchangeTicket() {
 
 async function refreshStoreCookie() {
     const KDLK_STORE_TICKET = $.getStore('KDLK_STORE_TICKET');
-    const { idpUserId, deviceId, phone } = KDLK_APP_HEARDERS;
+    const { idpUserId, deviceId, phone } = KDLK_APP_HEADERS;
     const url = `https://cocm.mall.sgmsonline.com/api/bkm/auth/login/ticket?idpUserId=${idpUserId}&ticket=${KDLK_STORE_TICKET}&b2cgw=1`;
     const { Cookie, Authorization, access_token, client_id } =
         KDLK_STORE_HEADERS;

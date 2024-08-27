@@ -1,10 +1,10 @@
 const $ = new Tool('凯迪拉克');
 
 const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
-const KDLK_APP_HEARDERS = $.getStore('KDLK_APP_HEARDERS');
+const KDLK_APP_HEADERS = $.getStore('KDLK_APP_HEADERS');
 const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 
-const { idpUserId, deviceId, client_id } = KDLK_APP_HEARDERS;
+const { idpUserId, deviceId, client_id } = KDLK_APP_HEADERS;
 
 let method = 'POST';
 let baseUrl = 'https://app.sgmlink.com:443/service/mycadillacv3/rest/api';
@@ -34,7 +34,7 @@ let headers = {
 };
 
 !(async () => {
-    if (!KDLK_APP_COOKIE || !KDLK_APP_HEARDERS || !KDLK_APP_ACCESS_TOKEN) {
+    if (!KDLK_APP_COOKIE || !KDLK_APP_HEADERS || !KDLK_APP_ACCESS_TOKEN) {
         $.notify(
             `Cookie读取失败！`,
             `请先打开重写，进入APP-我的页面和商城页面获取Cookie`
