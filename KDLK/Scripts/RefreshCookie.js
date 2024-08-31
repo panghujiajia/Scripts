@@ -25,7 +25,7 @@ let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
     .finally(() => $.done());
 
 async function refreshAppToken() {
-    const url = `https://app.sgmlink.com:443/service/mycadillacv3/rest/api/public/auth/v3/refreshToken`;
+    const url = `https://mycadillac.apps.sgmsonline.com/service/mycadillacv3/rest/api/public/auth/v4/refreshToken`;
     const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEARDERS;
 
     const headers = {
