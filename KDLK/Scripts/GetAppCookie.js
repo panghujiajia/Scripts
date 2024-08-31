@@ -2,50 +2,38 @@ const $ = new Tool('凯迪拉克');
 
 try {
     const { url, headers } = $request;
-    const { Cookie, access_token, Authorization } = headers;
     const { body, headers: resHeaders } = $response;
-    $.log($response);
-    // 111
     const { data } = JSON.parse(body);
+    let KDLK_APP_INFO = $.getStore('KDLK_APP_INFO') || {};
     if (url.includes('baseInfo')) {
-        $.setStore('KDLK_APP_HEADERS', {
-            ...headers
-        });
-        if (access_token) {
-            $.setStore('KDLK_APP_ACCESS_TOKEN', access_token);
-        }
+        KDLK_APP_INFO = { ...KDLK_APP_INFO, ...headers };
     } else {
-        const { accessToken } = data.auth;
+        const { accessToken, refreshToken } = data.auth;
         if (resHeaders && resHeaders['set-cookie']) {
             const setCookie = resHeaders['set-cookie'];
-            $.setStore('KDLK_APP_COOKIE', setCookie.split(';')[0]);
+            KDLK_APP_INFO = {
+                ...KDLK_APP_INFO,
+                Cookie: setCookie.split(';')[0]
+            };
         }
         if (accessToken || access_token) {
-            $.setStore('KDLK_APP_ACCESS_TOKEN', accessToken || access_token);
+            KDLK_APP_INFO = {
+                ...KDLK_APP_INFO,
+                access_token: accessToken || access_token
+            };
         }
+        KDLK_APP_INFO.refreshToken = refreshToken;
+        $.setStore('KDLK_APP_INFO', KDLK_APP_INFO);
     }
-    if (url.includes('signInfo')) {
-        $.notify(`signInfo捕获！！！`, Authorization);
-        $.setStore('KDLK_APP_HEADERS', {
-            ...$.getStore('KDLK_APP_HEADERS'),
-            Authorization
-        });
-    }
-    if (Cookie) {
-        $.setStore('KDLK_APP_COOKIE', Cookie);
-    }
-    notify();
-} catch (error) {
-    $.log(`Error：\n${error}\n${JSON.stringify(error)}`);
-}
-
-function notify() {
-    const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
-    const KDLK_APP_HEADERS = $.getStore('KDLK_APP_HEADERS');
-    const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
-    if (KDLK_APP_COOKIE && KDLK_APP_HEADERS && KDLK_APP_ACCESS_TOKEN) {
+    if (
+        KDLK_APP_INFO.refreshToken &&
+        KDLK_APP_INFO.access_token &&
+        KDLK_APP_INFO.Cookie
+    ) {
         $.notify(`App-Cookie写入成功！`);
     }
+} catch (error) {
+    $.log(`Error：\n${error}\n${JSON.stringify(error)}`);
 }
 $.done();
 

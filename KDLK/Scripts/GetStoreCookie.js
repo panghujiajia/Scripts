@@ -2,12 +2,9 @@ const $ = new Tool('凯迪拉克');
 
 try {
     const { headers } = $request;
-    const { Cookie, access_token } = headers;
-    if (!Cookie || !access_token) {
-        $.log(`获取Cookie失败：${JSON.stringify(headers)}`);
-        $.notify(`Cookie获取失败！`);
-    } else {
-        $.setStore('KDLK_STORE_HEADERS', headers);
+    $.setStore('KDLK_STORE_INFO', headers);
+    const KDLE_STORE_INFO = $.getStore('KDLK_STORE_INFO');
+    if (KDLE_STORE_INFO.Cookie && KDLE_STORE_INFO.access_token) {
         $.notify(`商城-Cookie写入成功！`);
     }
 } catch (error) {
