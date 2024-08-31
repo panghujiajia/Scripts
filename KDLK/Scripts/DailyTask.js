@@ -95,7 +95,7 @@ async function getList(type) {
     const reqBody = {
         limit: '4',
         scope: 'ALL',
-        idpUserId,
+        idpuserid,
         category: 'RECOMMEND',
         skip: '0'
     };
@@ -154,7 +154,7 @@ async function read(item) {
 async function forward(item) {
     await $.wait();
     const url = `${baseUrl}/public/newCommunity/article/v1/forward`;
-    const reqBody = { articleId: item.id, idpUserId };
+    const reqBody = { articleId: item.id, idpuserid };
     const myRequest = {
         url,
         method,

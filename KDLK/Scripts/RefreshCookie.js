@@ -26,7 +26,7 @@ let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
 
 async function refreshAppToken() {
     const url = `https://mycadillac.apps.sgmsonline.com/service/mycadillacv3/rest/api/public/auth/v4/refreshToken`;
-    const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEADERS;
+    const { idpuserid, deviceId } = KDLK_APP_HEADERS;
 
     const headers = {
         Connection: `keep-alive`,
@@ -46,7 +46,7 @@ async function refreshAppToken() {
     };
     const body = {
         permToken: KDLK_APP_REFRESH_ACCESS_TOKEN,
-        userName: idpUserId
+        userName: idpuserid
     };
     const myRequest = {
         url: url,
@@ -74,7 +74,7 @@ async function refreshAppToken() {
 // 获取ticket
 async function getExchangeTicket() {
     const url = `https://mycadillac.apps.sgmsonline.com/service/mycadillacv3/rest/api/private/vehicleMarket/getExchangeTicket`;
-    const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEADERS;
+    const { idpuserid, buid, client_id } = KDLK_APP_HEADERS;
     const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
     const headers = {
         'user-agent': 'Dart/2.19 (dart:io)',
@@ -85,14 +85,14 @@ async function getExchangeTicket() {
         mobile_os: 'IOS:17.4',
         'content-type': 'application/json; charset=utf-8',
         tag: 'IOS',
-        buid: idpUserId,
+        buid,
         mobile_model: 'iPhone15,3',
         client_id,
         access_token: KDLK_APP_ACCESS_TOKEN,
         'content-length': '2',
         host: 'mycadillac.apps.sgmsonline.com',
         mobile_brand: 'iPhone',
-        idpuserid: idpUserId
+        idpuserid
     };
     const body = {};
     const myRequest = {
@@ -116,8 +116,8 @@ async function getExchangeTicket() {
 
 async function refreshStoreCookie() {
     const KDLK_STORE_TICKET = $.getStore('KDLK_STORE_TICKET');
-    const { idpUserId, deviceId, phone } = KDLK_APP_HEADERS;
-    const url = `https://cocm.mall.sgmsonline.com/api/bkm/auth/login/ticket?idpUserId=${idpUserId}&ticket=${KDLK_STORE_TICKET}&b2cgw=1`;
+    const { idpuserid } = KDLK_APP_HEADERS;
+    const url = `https://cocm.mall.sgmsonline.com/api/bkm/auth/login/ticket?idpUserId=${idpuserid}&ticket=${KDLK_STORE_TICKET}&b2cgw=1`;
     const { Cookie, Authorization, access_token, client_id } =
         KDLK_STORE_HEADERS;
     const headers = {
@@ -138,7 +138,7 @@ async function refreshStoreCookie() {
         'channel-code': 'COCM',
         Referer: `https://cocm.mall.sgmsonline.com/?hideTitleBar=1&hideBar=1&idpUserId=${idpUserId}&ticket=${KDLK_STORE_TICKET}&clientCode=MycadillacApp`,
         'Content-Length': '0',
-        idpUserId: idpUserId,
+        idpuserid,
         'Sec-Fetch-Dest': 'empty'
     };
     const myRequest = {
