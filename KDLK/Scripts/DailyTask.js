@@ -4,31 +4,32 @@ const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
 const KDLK_APP_HEARDERS = $.getStore('KDLK_APP_HEARDERS');
 const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 
-const { idpuserid, deviceId, client_id } = KDLK_APP_HEARDERS;
+const { idpuserid, deviceId, client_id, uuid, buid } = KDLK_APP_HEARDERS;
 
 let method = 'POST';
 let baseUrl =
     'https://mycadillac.apps.sgmsonline.com/service/mycadillacv3/rest/api';
 let headers = {
-    'accept-encoding': `gzip`,
-    host: `mycadillac.apps.sgmsonline.com`,
-    idpuserid,
-    deviceId,
-    app_version: `7.8.1`,
-    mobile_model: `iPhone15,3`,
-    mobile_brand: `iPhone`,
-    'content-length': '2',
-    uuid: deviceId,
-    'User-Agent': `Dart/2.19 (dart:io)`,
-    tag: `IOS`,
-    'Accept-Language': `zh-Hans-CN;q=1`,
-    'content-type': `application/json; charset=utf-8`,
-    mobile_os: `IOS:18.0`,
-    buid: idpuserid,
+    'user-agent': `Dart/2.19 (dart:io)`,
     appid: `MyCadillac`,
+    app_version: `7.8.1`,
+    'accept-encoding': `gzip`,
+    uuid,
+    mobile_os: `IOS:18.0`,
+    'content-type': `application/json; charset=utf-8`,
+    tag: `IOS`,
+    buid,
+    mobile_model: `iPhone15,3`,
     client_id,
-    Cookie: KDLK_APP_COOKIE,
-    access_token: KDLK_APP_ACCESS_TOKEN
+    access_token: KDLK_APP_ACCESS_TOKEN,
+    'content-length': '2',
+    host: `mycadillac.apps.sgmsonline.com`,
+    mobile_brand: `iPhone`,
+    idpuserid
+    //
+    // deviceId,
+    // 'Accept-Language': `zh-Hans-CN;q=1`,
+    // Cookie: KDLK_APP_COOKIE
 };
 
 !(async () => {
