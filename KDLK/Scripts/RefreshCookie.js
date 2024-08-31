@@ -1,7 +1,7 @@
 const $ = new Tool('凯迪拉克');
 
 const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
-const KDLK_APP_HEARDERS = $.getStore('KDLK_APP_HEARDERS');
+const KDLK_APP_HEADERS = $.getStore('KDLK_APP_HEADERS');
 const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 const KDLK_APP_REFRESH_ACCESS_TOKEN = $.getStore(
     'KDLK_APP_REFRESH_ACCESS_TOKEN'
@@ -12,7 +12,7 @@ let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
     if (
         !KDLK_STORE_HEADERS ||
         !KDLK_APP_COOKIE ||
-        !KDLK_APP_HEARDERS ||
+        !KDLK_APP_HEADERS ||
         !KDLK_APP_ACCESS_TOKEN ||
         !KDLK_APP_REFRESH_ACCESS_TOKEN
     ) {
@@ -26,7 +26,7 @@ let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
 
 async function refreshAppToken() {
     const url = `https://mycadillac.apps.sgmsonline.com/service/mycadillacv3/rest/api/public/auth/v4/refreshToken`;
-    const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEARDERS;
+    const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEADERS;
 
     const headers = {
         Connection: `keep-alive`,
@@ -74,7 +74,7 @@ async function refreshAppToken() {
 // 获取ticket
 async function getExchangeTicket() {
     const url = `https://mycadillac.apps.sgmsonline.com/service/mycadillacv3/rest/api/private/vehicleMarket/getExchangeTicket`;
-    const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEARDERS;
+    const { idpUserId, deviceId, client_id, phone } = KDLK_APP_HEADERS;
     const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
     const headers = {
         'user-agent': 'Dart/2.19 (dart:io)',
@@ -116,7 +116,7 @@ async function getExchangeTicket() {
 
 async function refreshStoreCookie() {
     const KDLK_STORE_TICKET = $.getStore('KDLK_STORE_TICKET');
-    const { idpUserId, deviceId, phone } = KDLK_APP_HEARDERS;
+    const { idpUserId, deviceId, phone } = KDLK_APP_HEADERS;
     const url = `https://cocm.mall.sgmsonline.com/api/bkm/auth/login/ticket?idpUserId=${idpUserId}&ticket=${KDLK_STORE_TICKET}&b2cgw=1`;
     const { Cookie, Authorization, access_token, client_id } =
         KDLK_STORE_HEADERS;

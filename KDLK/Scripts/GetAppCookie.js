@@ -2,17 +2,12 @@ const $ = new Tool('凯迪拉克');
 
 try {
     const { url, headers } = $request;
-    const { Cookie, access_token, idpuserid, deviceId, client_id } = headers;
+    const { Cookie, access_token } = headers;
     const { body } = $response;
     const { data } = JSON.parse(body);
     if (url.includes('baseInfo')) {
         const phone = data.profileInfo.phone;
-        $.setStore('KDLK_APP_HEARDERS', {
-            idpUserId: idpuserid,
-            deviceId,
-            client_id,
-            phone
-        });
+        $.setStore('KDLK_APP_HEADERS', headers);
     } else {
         const { accessToken, refreshToken } = data.auth;
         if (accessToken || access_token) {
@@ -32,7 +27,7 @@ try {
 
 function notify() {
     const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
-    const KDLK_APP_HEARDERS = $.getStore('KDLK_APP_HEARDERS');
+    const KDLK_APP_HEADERS = $.getStore('KDLK_APP_HEADERS');
     const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
     const KDLK_APP_REFRESH_ACCESS_TOKEN = $.getStore(
         'KDLK_APP_REFRESH_ACCESS_TOKEN'
@@ -42,7 +37,7 @@ function notify() {
     );
     if (
         KDLK_APP_COOKIE &&
-        KDLK_APP_HEARDERS &&
+        KDLK_APP_HEADERS &&
         KDLK_APP_ACCESS_TOKEN &&
         KDLK_APP_REFRESH_ACCESS_TOKEN
     ) {
