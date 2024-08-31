@@ -1,17 +1,10 @@
 const $ = new Tool('凯迪拉克');
 
-const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
-const KDLK_APP_HEADERS = $.getStore('KDLK_APP_HEADERS');
-const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
-let KDLK_STORE_HEADERS = $.getStore('KDLK_STORE_HEADERS');
+const KDLK_APP_INFO = $.getStore('KDLK_APP_INFO');
+const KDLK_STORE_INFO = $.getStore('KDLK_STORE_HEADERS');
 
 !(async () => {
-    if (
-        !KDLK_STORE_HEADERS ||
-        !KDLK_APP_COOKIE ||
-        !KDLK_APP_HEADERS ||
-        !KDLK_APP_ACCESS_TOKEN
-    ) {
+    if (!KDLK_APP_INFO || !KDLK_STORE_INFO) {
         $.notify(`Cookie读取失败！`, `请先打开重写，进入APP获取Cookie`);
     } else {
         await refreshAppTokenNew();
