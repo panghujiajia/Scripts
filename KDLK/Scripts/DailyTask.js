@@ -7,7 +7,8 @@ const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 const { idpUserId, deviceId, client_id } = KDLK_APP_HEARDERS;
 
 let method = 'POST';
-let baseUrl = 'https://app.sgmlink.com:443/service/mycadillacv3/rest/api';
+let baseUrl =
+    'https://mycadillac.apps.sgmsonline.com/service/mycadillacv3/rest/api';
 let headers = {
     'Accept-Encoding': `gzip, deflate, br`,
     Host: `app.sgmlink.com:443`,
