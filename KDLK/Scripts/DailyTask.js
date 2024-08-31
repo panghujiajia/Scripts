@@ -4,31 +4,28 @@ const KDLK_APP_COOKIE = $.getStore('KDLK_APP_COOKIE');
 const KDLK_APP_HEARDERS = $.getStore('KDLK_APP_HEARDERS');
 const KDLK_APP_ACCESS_TOKEN = $.getStore('KDLK_APP_ACCESS_TOKEN');
 
-const { idpUserId, deviceId, client_id } = KDLK_APP_HEARDERS;
+const { idpuserid, deviceId, client_id } = KDLK_APP_HEARDERS;
 
 let method = 'POST';
 let baseUrl =
     'https://mycadillac.apps.sgmsonline.com/service/mycadillacv3/rest/api';
 let headers = {
-    'Accept-Encoding': `gzip, deflate, br`,
-    Host: `app.sgmlink.com:443`,
-    idpUserId,
+    'accept-encoding': `gzip`,
+    host: `mycadillac.apps.sgmsonline.com`,
+    idpuserid,
     deviceId,
-    'X-Tingyun-Id': `4Nl_NnGbjwY;c=2;r=1662739668;u=35e02d1754b727796a15156a1ad53435::BD4E4C616020FB61`,
-    app_version: `6.2.0`,
-    mobile_model: `iPhone14,3`,
-    Connection: `keep-alive`,
-    mobile_brand: `ios`,
-    uuId: deviceId,
-    'User-Agent': `MyCadillac_Mycadillac_IOS_V.6.2.0__release/6.2.0 (iPhone; iOS 16.0.3; Scale/3.00)`,
-    tag: `ios`,
+    app_version: `7.8.1`,
+    mobile_model: `iPhone15,3`,
+    mobile_brand: `iPhone`,
+    'content-length': '2',
+    uuid: deviceId,
+    'User-Agent': `Dart/2.19 (dart:io)`,
+    tag: `IOS`,
     'Accept-Language': `zh-Hans-CN;q=1`,
-    'Content-Type': `application/json; charset=utf-8`,
-    'X-Tingyun': `c=A|HYFIoSexPMs`,
-    mobile_OS: `16.0.3`,
-    Accept: `*/*`,
-    buId: idpUserId,
-    appId: `MyCadillac`,
+    'content-type': `application/json; charset=utf-8`,
+    mobile_os: `IOS:18.0`,
+    buid: idpuserid,
+    appid: `MyCadillac`,
     client_id,
     Cookie: KDLK_APP_COOKIE,
     access_token: KDLK_APP_ACCESS_TOKEN
