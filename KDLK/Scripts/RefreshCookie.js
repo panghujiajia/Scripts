@@ -136,7 +136,7 @@ async function refreshStoreCookie() {
             'mycadillac_app_new Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
         client_id: client_id,
         'channel-code': 'COCM',
-        Referer: `https://cocm.mall.sgmsonline.com/?hideTitleBar=1&hideBar=1&idpUserId=${idpUserId}&ticket=${KDLK_STORE_TICKET}&clientCode=MycadillacApp`,
+        Referer: `https://cocm.mall.sgmsonline.com/?hideTitleBar=1&hideBar=1&idpUserId=${idpuserid}&ticket=${KDLK_STORE_TICKET}&clientCode=MycadillacApp`,
         'Content-Length': '0',
         idpuserid,
         'Sec-Fetch-Dest': 'empty'
